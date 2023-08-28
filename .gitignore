@@ -1,0 +1,8 @@
+venv/
+media/
+.idea/
+db.sqlite3
+**/__pycache__/
+apps/tour/migrations/0001_initial.py
+apps/tour/data.json
+apps/location/

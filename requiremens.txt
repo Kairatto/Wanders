@@ -1,0 +1,5 @@
+django
+djangorestframework
+python-slugify
+Pillow
+drf-yasg
