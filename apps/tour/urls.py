@@ -1,8 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import NewsViewSet, CommentViewSet
 
-from .views import TourList
 
+router = DefaultRouter()
+router.register(r'news', NewsViewSet)
+router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
-    path('tours/', TourList.as_view(), name='tour-list'),
+    path('', include(router.urls)),
 ]

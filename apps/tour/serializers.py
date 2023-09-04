@@ -1,27 +1,22 @@
 from rest_framework import serializers
-
-from .models import Tour, Information
-
-
-class InformationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Information
-        fields = '__all__'
+from .models import News, Comment
 
 
-class TourSerializer(serializers.ModelSerializer):
-    information = InformationSerializer(many=True)
+class NewsSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=255)
+    description = serializers.CharField()
+    image = serializers.ImageField()
 
-    class Meta:
-        model = Tour
-        fields = '__all__'
+
+class CommentSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=255)
+    description = serializers.CharField()
+    image = serializers.ImageField()
+    news = NewsSerializer(required=True, allow_null=None)
 
     def create(self, validated_data):
-        information_data = validated_data.pop('information')
-        tour = Tour.objects.create(**validated_data)
+        news_data = validated_data.pop('news', None)
+        news_obj, _ = News.objects.get_or_create(**news_data)
+        comment_obj = Comment.objects.create(news=news_obj, **validated_data)
+        return comment_obj
 
-        for info_data in information_data:
-            Information.objects.create(tour=tour, **info_data)
-
-        return tour

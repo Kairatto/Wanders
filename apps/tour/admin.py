@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tour
+from .models import News, Comment
 
-admin.site.register(Tour)
-
+admin.site.register(News)
+admin.site.register(Comment)

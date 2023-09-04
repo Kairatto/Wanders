@@ -1,18 +1,15 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
-class Information(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(max_length=2000)
-
-    def __str__(self):
-        return self.title
+class News(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=5000)
+    image = models.ImageField(upload_to="news_images/")
 
 
-class Tour(models.Model):
-    title = models.CharField(max_length=200)
-    information = models.ManyToManyField(Information, blank=True)
-    image = models.ImageField(upload_to="tour_images/")
-
-    def __str__(self):
-        return self.title
+class Comment(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=5000)
+    image = models.ImageField(upload_to="comment_images/")
+    news = models.ForeignKey(News, on_delete=models.CASCADE, blank=True)
