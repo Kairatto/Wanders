@@ -1,12 +1,13 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import NewsViewSet, CommentViewSet
+from django.urls import path
 
+from .views import (
+    DaysView,
+    DaysRetrieveUpdateDeleteView
+)
 
-router = DefaultRouter()
-router.register(r'news', NewsViewSet)
-router.register(r'comments', CommentViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('days/<str:slug>/', DaysRetrieveUpdateDeleteView.as_view(), name='day-retrieve'),
+    path('days/', DaysView.as_view(), name='days'),
+
 ]
