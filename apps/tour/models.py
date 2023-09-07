@@ -2,15 +2,10 @@ from django.db import models
 from slugify import slugify
 
 
-# class Tour(models.Model):
-#     title = models.CharField(max_length=100, verbose_name='Название тура')
-
-
 class Days(models.Model):
     title = models.CharField(max_length=100, verbose_name='Название дня')
     description = models.TextField(blank=True)
     slug = models.SlugField(max_length=120, primary_key=True, blank=True)
-    # tour = models.ForeignKey(to=Tour, on_delete=models.CASCADE, related_name='tour')
 
     def __str__(self) -> str:
         return self.title
@@ -26,10 +21,10 @@ class Days(models.Model):
 
 
 class DaysImage(models.Model):
-    image = models.ImageField(upload_to='media/day_images')
+    image = models.ImageField(upload_to='media/days_images')
     day = models.ForeignKey(
         to=Days,
         on_delete=models.CASCADE,
-        related_name='day_images',
+        related_name='days_images',
     )
 
