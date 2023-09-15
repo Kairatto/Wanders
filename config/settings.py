@@ -15,25 +15,13 @@ SECRET_KEY = 'django-insecure-dy)hate@daj1v$42^qvx#_fbmqbdclqa@53z%*v1l_@#-bu-5d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-
 ALLOWED_HOSTS = []
 
 
-# CORS_ALLOW_ALL_ORIGINS = False
-#
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:3000',
 # ]
 
-# CORS_ALLOW_METHODS = [
-#     'GET',
-#     'POST',
-#     'PUT',
-#     'PATCH',
-#     'DELETE',
-#     'OPTIONS',
-# ]
 
 
 INSTALLED_APPS = [
@@ -49,7 +37,8 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'apps.tour',
-    # 'apps.location',
+    'apps.days',
+    'apps.accommodation',
 
 ]
 

@@ -2,7 +2,10 @@ venv/
 media/
 .idea/
 db.sqlite3
+post.json
 **/__pycache__/
 apps/tour/migrations/0001_initial.py
+apps/days/migrations/0001_initial.py
+apps/accommodation/migrations/0001_initial.py
 apps/tour/data.json
 apps/location/

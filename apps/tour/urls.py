@@ -1,13 +1,8 @@
 from django.urls import path
-
-from .views import (
-    DaysView,
-    DaysRetrieveUpdateDeleteView,
-)
-
+from . import views
 
 urlpatterns = [
-    path('days/<str:slug>/', DaysRetrieveUpdateDeleteView.as_view(), name='day-retrieve'),
-    path('days/', DaysView.as_view(), name='days'),
-
+    path('tour_create/', views.CreateTourWithDays.as_view(), name='tours'),
+    path('tours/', views.TourList.as_view(), name='tour-list'),
+    path('tours/<str:slug>/', views.TourDetail.as_view(), name='tour-detail'),
 ]

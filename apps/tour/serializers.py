@@ -1,50 +1,41 @@
 from rest_framework import serializers
-from .models import Days, DaysImage
+from .models import Tour
+from apps.days.models import Days, DaysImage
+from apps.days.serializers import DaysSerializer
+from apps.accommodation.serializers import AccommodationSerializer
+from ..accommodation.models import Accommodation, Hotel, HotelImages
 
 
-class DaysCreateSerializer(serializers.ModelSerializer):
+class TourSerializer(serializers.ModelSerializer):
+    days = DaysSerializer(many=True)
+    accommodations = AccommodationSerializer(many=True)
 
     class Meta:
-        model = Days
-        fields = '__all__'
-
-    day_image_carousel = serializers.ListField(
-        child=serializers.ImageField(),
-        write_only=True,
-    )
+        model = Tour
+        fields = ('slug', 'title_tour', 'text_tour', 'days', 'accommodations', 'create_date')
 
     def create(self, validated_data):
-        day_carousel = validated_data.pop('day_image_carousel')
-        day = Days.objects.create(**validated_data)
-        images = []
-        for image in day_carousel:
-            images.append(DaysImage(day=day, image=image))
-        DaysImage.objects.bulk_create(images)
-        day.save()
+        days_data = validated_data.pop('days')
+        accommodation_data = validated_data.pop('accommodations')
+        tour = Tour.objects.create(**validated_data)
 
-        return day
+        for day_data in days_data:
+            days_images_data = day_data.pop('days_images', [])
+            days = Days.objects.create(tour=tour, **day_data)
 
+            for image_data in days_images_data:
+                DaysImage.objects.create(tour=days, **image_data)
 
-class DaysSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Days
-        fields = '__all__'
+        for accommodations_data in accommodation_data:
+            hotel_data = accommodations_data.pop('hotels', [])
+            accommodations = Accommodation.objects.create(tour=tour, **accommodations_data)
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['carousel'] = DaysImageSerializer(
-            instance.days_images.all(), many=True
-        ).data
-        return representation
+            for hotels_data in hotel_data:
+                hotels_images_data = hotels_data.pop('hotel_images')
+                hotels = Hotel.objects.create(accommodation=accommodations, **hotels_data)
+                for hotel_image_data in hotels_images_data:
+                    HotelImages.objects.create(hotels=hotels, **hotel_image_data)
 
+                return tour
 
-class DaysListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Days
-        fields = '__all__'
-
-
-class DaysImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DaysImage
-        fields = 'image',
+        return tour
