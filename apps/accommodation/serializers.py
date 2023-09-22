@@ -16,11 +16,11 @@ class HotelSerializer(serializers.ModelSerializer):
         fields = ('slug', 'title_hotel', 'description_hotel', 'hotel_images')
 
     def create(self, validated_data):
-        hotel_images_data = validated_data.pop('hotel_images', [])
+        hotel_images_data = validated_data.pop('hotel_images')
         hotels = Hotel.objects.create(**validated_data)
 
         for hotels_images_data in hotel_images_data:
-            HotelImages.objects.create(hotels=hotels, **hotels_images_data)
+            HotelImages.objects.create(hotel=hotels, **hotels_images_data)
 
         return hotels
 
@@ -37,6 +37,6 @@ class AccommodationSerializer(serializers.ModelSerializer):
         accommodations = Accommodation.objects.create(**validated_data)
 
         for hotels_data in hotel_data:
-            Hotel.objects.create(accommodations=accommodations, **hotels_data)
+            Hotel.objects.create(accommodation=accommodations, **hotels_data)
 
         return accommodations

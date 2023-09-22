@@ -5,9 +5,9 @@ from apps.tour.models import Tour
 
 
 class Days(models.Model):
-    title_days = models.CharField(max_length=100, verbose_name='Название дня')
+    title_days = models.CharField(max_length=300, verbose_name='Название дня')
     description_days = models.TextField(blank=True)
-    slug = models.SlugField(max_length=120, primary_key=True, blank=True)
+    slug = models.SlugField(max_length=300, primary_key=True, blank=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,

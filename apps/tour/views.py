@@ -26,3 +26,4 @@ class TourDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
     lookup_field = 'slug'
+    

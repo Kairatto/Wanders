@@ -24,7 +24,7 @@ class Accommodation(models.Model):
     description_accommodation = models.TextField(blank=True)
     comfort = models.CharField(max_length=13, choices=COMFORT_CHOICES, verbose_name='Степень комфорта')
     type = models.CharField(max_length=7, choices=TYPE_CHOICES, verbose_name='Тип проживания')
-    slug = models.SlugField(max_length=120, primary_key=True, blank=True)
+    slug = models.SlugField(max_length=300, primary_key=True, blank=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,
@@ -44,9 +44,9 @@ class Accommodation(models.Model):
 
 
 class Hotel(models.Model):
-    title_hotel = models.CharField(max_length=100, verbose_name='Название отеля')
+    title_hotel = models.CharField(max_length=300, verbose_name='Название отеля')
     description_hotel = models.TextField(blank=True)
-    slug = models.SlugField(max_length=120, primary_key=True, blank=True)
+    slug = models.SlugField(max_length=300, primary_key=True, blank=True)
     accommodation = models.ForeignKey(
         to=Accommodation,
         on_delete=models.CASCADE,
