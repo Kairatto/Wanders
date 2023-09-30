@@ -21,9 +21,16 @@ class TourList(generics.ListCreateAPIView):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
 
+    def get_queryset(self):
+        return Tour.objects.filter(is_active=True)
+
 
 class TourDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
     lookup_field = 'slug'
+
+    def perform_destroy(self, instance):
+        instance.is_active = False
+        instance.save()
     

@@ -24,7 +24,7 @@ class Accommodation(models.Model):
     description_accommodation = models.TextField(blank=True)
     comfort = models.CharField(max_length=13, choices=COMFORT_CHOICES, verbose_name='Степень комфорта')
     type = models.CharField(max_length=7, choices=TYPE_CHOICES, verbose_name='Тип проживания')
-    slug = models.SlugField(max_length=300, primary_key=True, blank=True)
+    slug = models.SlugField(max_length=300, unique=True, blank=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,
@@ -36,8 +36,18 @@ class Accommodation(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title_accommodation)
-        return super().save(*args, **kwargs)
+            self.slug = ""
+        super().save(*args, **kwargs)
+
+        if not self.slug:
+            base_slug = slugify(f"{self.id}-{self.title_accommodation}")
+            slug = base_slug
+            counter = 1
+            while Tour.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+            self.save()
 
     class Meta:
         verbose_name = 'Проживание'
@@ -46,7 +56,7 @@ class Accommodation(models.Model):
 class Hotel(models.Model):
     title_hotel = models.CharField(max_length=300, verbose_name='Название отеля')
     description_hotel = models.TextField(blank=True)
-    slug = models.SlugField(max_length=300, primary_key=True, blank=True)
+    slug = models.SlugField(max_length=300, unique=True, blank=True)
     accommodation = models.ForeignKey(
         to=Accommodation,
         on_delete=models.CASCADE,
@@ -58,8 +68,18 @@ class Hotel(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title_hotel)
-        return super().save(*args, **kwargs)
+            self.slug = ""
+        super().save(*args, **kwargs)
+
+        if not self.slug:
+            base_slug = slugify(f"{self.id}-{self.title_hotel}")
+            slug = base_slug
+            counter = 1
+            while Tour.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+            self.save()
 
     class Meta:
         verbose_name = 'Отель'
