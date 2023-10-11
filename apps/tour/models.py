@@ -4,7 +4,6 @@ from slugify import slugify
 
 class Tour(models.Model):
     title_tour = models.CharField(max_length=300, verbose_name='Название тура')
-    text_tour = models.TextField()
     create_date = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True, verbose_name='Активный')
     slug = models.SlugField(max_length=300, unique=True, blank=True)

@@ -8,4 +8,5 @@ apps/days/migrations/0001_initial.py
 apps/accommodation/migrations/0001_initial.py
 apps/tour_images/migrations/0001_initial.py
 apps/important_information/migrations/0001_initial.py
+apps/tour_description/migrations/0001_initial.py
 post.json

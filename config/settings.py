@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'apps.tour',
+    'apps.tour_description',
     'apps.accommodation',
     'apps.days',
     'apps.tour_images',

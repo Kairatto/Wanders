@@ -8,22 +8,26 @@ from apps.tour_images.serializers import TourImagesSerializer
 from apps.important_information.serializers import ImportantInformationSerializer
 from apps.important_information.models import ImportantInformation
 from apps.tour_images.models import TourImages
+from apps.tour_description.models import TourDescription, DescriptionDetail
+from apps.tour_description.serializers import TourDescriptionSerializer
 
 
 class TourSerializer(serializers.ModelSerializer):
     tour_images = TourImagesSerializer(many=True)
     days = DaysSerializer(many=True)
+    tour_description = TourDescriptionSerializer(many=True)
     accommodations = AccommodationSerializer(many=True)
     important_informations = ImportantInformationSerializer(many=True)
 
     class Meta:
         model = Tour
-        fields = ('slug', 'title_tour', 'text_tour',
+        fields = ('slug', 'title_tour', 'tour_description',
                   'tour_images', 'days', 'accommodations',
                   'important_informations', 'is_active', 'create_date')
 
     def create(self, validated_data):
         tour_images_data = validated_data.pop('tour_images')
+        tour_descriptions_data = validated_data.pop('tour_description')
         days_data = validated_data.pop('days')
         accommodation_data = validated_data.pop('accommodations')
         important_informations_data = validated_data.pop('important_informations')
@@ -34,6 +38,12 @@ class TourSerializer(serializers.ModelSerializer):
             days = Days.objects.create(tour=tour, **day_data)
             for image_data in days_images_data:
                 DaysImage.objects.create(day=days, **image_data)
+
+        for tour_description_data in tour_descriptions_data:
+            description_details_data = tour_description_data.pop('description_details', [])
+            tour_description = TourDescription.objects.create(tour=tour, **tour_description_data)
+            for details_data in description_details_data:
+                DescriptionDetail.objects.create(tour_description=tour_description, **details_data)
 
         for tour_image_data in tour_images_data:
             tour_image_data.pop('tour_images', [])

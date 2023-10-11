@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import Days, DaysImage
 
-# Register your models here.
+
+admin.site.register(Days)
+admin.site.register(DaysImage)
