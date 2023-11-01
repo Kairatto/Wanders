@@ -19,7 +19,7 @@ class TourDescription(models.Model):
 class DescriptionDetail(models.Model):
     title_detail = models.CharField(max_length=400)
     description_detail = models.TextField()
-    image = models.ImageField(upload_to='description_images')
+    image = models.ImageField(upload_to='description_images', blank=True)
     tour_description = models.ForeignKey(
         to=TourDescription,
         on_delete=models.CASCADE,
