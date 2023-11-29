@@ -17,14 +17,11 @@ class TourDescription(models.Model):
 
 
 class DescriptionDetail(models.Model):
-    title_detail = models.CharField(max_length=400)
-    description_detail = models.TextField()
+    title = models.CharField(max_length=400, blank=True)
+    description = models.TextField(blank=True)
     image = models.ImageField(upload_to='description_images', blank=True)
     tour_description = models.ForeignKey(
         to=TourDescription,
         on_delete=models.CASCADE,
         related_name='description_details',
-        default=None,
-        null=True,
-        blank=True,
     )

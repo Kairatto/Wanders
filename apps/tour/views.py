@@ -6,7 +6,7 @@ from .models import Tour
 from .serializers import TourSerializer
 
 
-class CreateTourWithDays(APIView):
+class TourCreate(APIView):
     def post(self, request, format=None):
         serializer = TourSerializer(data=request.data)
 
@@ -17,7 +17,7 @@ class CreateTourWithDays(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TourList(generics.ListCreateAPIView):
+class TourList(generics.ListAPIView):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
 

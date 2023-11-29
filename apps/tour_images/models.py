@@ -9,7 +9,4 @@ class TourImages(models.Model):
         to=Tour,
         on_delete=models.CASCADE,
         related_name='tour_images',
-        null=True,
-        blank=True,
-        default=None
     )

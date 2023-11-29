@@ -13,7 +13,7 @@ class DaysSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Days
-        fields = ('slug', 'title_days', 'description_days', 'days_images')
+        fields = ('slug', 'title', 'description', 'days_images')
 
     def create(self, validated_data):
         days_images_data = validated_data.pop('days_images')
