@@ -7,39 +7,39 @@ class ActivitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Activity
-        fields = '__all__'
+        fields = ('activity',)
 
 
 class CitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = City
-        fields = '__all__'
+        fields = ('city', )
 
 
 class CountrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = '__all__'
+        fields = ('country', )
 
 
 class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = '__all__'
+        fields = ('collection', )
 
 
 class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = '__all__'
+        fields = ('location', )
 
 
 class TouristRegionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TouristRegion
-        fields = '__all__'
+        fields = ('region', )

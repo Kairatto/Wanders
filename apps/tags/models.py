@@ -3,13 +3,7 @@ from slugify import slugify
 
 
 class Collection(models.Model):
-    slug = models.SlugField(primary_key=True, max_length=35, blank=True)
     collection = models.CharField(max_length=30)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.collection)
-        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.collection
@@ -20,13 +14,7 @@ class Collection(models.Model):
 
 
 class Activity(models.Model):
-    slug = models.SlugField(primary_key=True, max_length=35, blank=True)
     activity = models.CharField(max_length=30)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.activity)
-        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.activity
@@ -37,13 +25,7 @@ class Activity(models.Model):
 
 
 class Country(models.Model):
-    slug = models.SlugField(primary_key=True, max_length=35, blank=True)
     country = models.CharField(max_length=30)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.country)
-        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.country
@@ -54,13 +36,7 @@ class Country(models.Model):
 
 
 class TouristRegion(models.Model):
-    slug = models.SlugField(primary_key=True, max_length=35, blank=True)
     region = models.CharField(max_length=30)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.region)
-        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.region
@@ -71,13 +47,7 @@ class TouristRegion(models.Model):
 
 
 class Location(models.Model):
-    slug = models.SlugField(primary_key=True, max_length=35, blank=True)
     location = models.CharField(max_length=30)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.location)
-        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.location
@@ -88,13 +58,7 @@ class Location(models.Model):
 
 
 class City(models.Model):
-    slug = models.SlugField(primary_key=True, max_length=35, blank=True)
     city = models.CharField(max_length=30)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.city)
-        return super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.city

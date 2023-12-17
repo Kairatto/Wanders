@@ -1,7 +1,19 @@
 from django.db import models
-from slugify import slugify
 
 from apps.tour.models import Tour
+
+
+TYPE_ACCOMMODATION_CHOICES = (
+        ('Tent', 'Палатка'),
+        ('Glamping', 'Глэмпинг'),
+        ('Hostel', 'Гостинница'),
+        ('Hotel', 'Отель'),
+        ('Holiday House', 'Дом отдыха'),
+        ('Apartments', 'Апартаменты'),
+        ('Camp site', 'Турбаза'),
+        ('Sanatorium', 'Санаторий'),
+        ('Villa', 'Вилла'),
+    )
 
 
 class Accommodation(models.Model):
@@ -13,7 +25,7 @@ class Accommodation(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Проживание'
+        verbose_name = 'Описание проживания'
 
 
 class AccommodationImages(models.Model):
@@ -25,89 +37,57 @@ class AccommodationImages(models.Model):
     )
 
 
-class Hotel(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Место проживания')
+class Place(models.Model):
+    title = models.CharField(max_length=300, verbose_name='Название проживания')
     description = models.TextField(max_length=999, blank=True, verbose_name='Описание проживания')
     amount_days = models.PositiveSmallIntegerField(verbose_name='Количество дней')
-    #  ПОМЕСТИТЬ СЮДА МОДЕЛЬ ТИП ПРОЖИВАНИЯ
-    #  ОТМЕНА БРОНИРОВАНИЯ ЭТО МОДЕЛЬ
-    slug = models.SlugField(max_length=300, unique=True, blank=True)
-    accommodation = models.ForeignKey(
-        to=Accommodation,
+    type_accommodation = models.CharField(max_length=200, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
+    tour = models.ForeignKey(
+        to=Tour,
         on_delete=models.CASCADE,
-        related_name='hotels',
+        related_name='place',
     )
 
     def __str__(self) -> str:
         return self.title
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = ""
-        super().save(*args, **kwargs)
-
-        if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.title}")
-            slug = base_slug
-            counter = 1
-            while Hotel.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-            self.save()
 
     class Meta:
-        verbose_name = 'Отель'
-        verbose_name_plural = 'Отели'
+        verbose_name = 'Место проживания'
+        verbose_name_plural = 'Места проживания'
 
 
-class HotelImages(models.Model):
-    image = models.ImageField(upload_to='hotel_images')
-    hotel = models.ForeignKey(
-        to=Hotel,
+class PlaceImages(models.Model):
+    image = models.ImageField(upload_to='place_images')
+    place = models.ForeignKey(
+        to=Place,
         on_delete=models.CASCADE,
-        related_name='hotel_images',
+        related_name='place_images',
     )
 
 
-class AnotherHotel(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Место проживания')
+class AnotherPlace(models.Model):
+    title = models.CharField(max_length=300, verbose_name='Название проживания')
     description = models.TextField(max_length=999, blank=True, verbose_name='Описание проживания')
     amount_days = models.PositiveSmallIntegerField(verbose_name='Количество дней')
-    slug = models.SlugField(max_length=300, unique=True, blank=True)
-    hotel = models.ForeignKey(
-        to=Hotel,
+    type_accommodation = models.CharField(max_length=200, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
+    place = models.ForeignKey(
+        to=Place,
         on_delete=models.CASCADE,
-        related_name='another_hotels',
+        related_name='another_place',
     )
 
     def __str__(self) -> str:
         return self.title
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = ""
-        super().save(*args, **kwargs)
-
-        if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.title}")
-            slug = base_slug
-            counter = 1
-            while Hotel.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-            self.save()
 
     class Meta:
         verbose_name = 'Другой вариант проживания'
         verbose_name_plural = 'Другие варианты проживания'
 
 
-class AnotherHotelImages(models.Model):
-    image = models.ImageField(upload_to='hotel_images')
-    another_hotel = models.ForeignKey(
-        to=AnotherHotel,
+class AnotherPlaceImages(models.Model):
+    image = models.ImageField(upload_to='place_images')
+    another_place = models.ForeignKey(
+        to=AnotherPlace,
         on_delete=models.CASCADE,
-        related_name='another_hotel_images',
+        related_name='another_place_images',
     )

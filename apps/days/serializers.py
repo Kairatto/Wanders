@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Tour, Days, DaysImage
+from .models import Days, DaysImage
 
 
 class DaysImageSerializer(serializers.ModelSerializer):
@@ -13,7 +13,7 @@ class DaysSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Days
-        fields = ('slug', 'title', 'description', 'days_images')
+        fields = ('title', 'description', 'days_images')
 
     def create(self, validated_data):
         days_images_data = validated_data.pop('days_images')

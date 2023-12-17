@@ -4,47 +4,50 @@ from slugify import slugify
 from apps.tags.models import Activity, City, Country, Collection, Location, TouristRegion
 
 
-class Tour(models.Model):
-
-    LANGUAGE_CHOICES = (
+LANGUAGE_CHOICES = (
         ('Russian', 'Русский'),
         ('English', 'Английский'),
         ('Kyrgyz', 'Кыргызкий'),
     )
 
-    DIFFICULTY_LEVEL_CHOICES = (
-        ('Base', 'Базовый'),
-        ('Medium', 'Средний'),
-        ('Advanced', 'Продвинутый'),
-    )
+DIFFICULTY_LEVEL_CHOICES = (
+    ('Base', 'Базовый'),
+    ('Medium', 'Средний'),
+    ('Advanced', 'Продвинутый'),
+)
 
-    TOUR_CURRENCY_CHOICES = (
-        ('KGS', 'Кыргызский СОМ, "KGS"'),
-        ('RUB', 'Российский РУБЛЬ, "RUB"'),
-        ('USD', 'Доллар США, "USD"'),
-    )
+TOUR_CURRENCY_CHOICES = (
+    ('KGS', 'Кыргызский СОМ, "KGS"'),
+    ('RUB', 'Российский РУБЛЬ, "RUB"'),
+    ('USD', 'Доллар США, "USD"'),
+)
 
-    TYPE_TOUR_CHOICES = (
-        ('AUTHORS', 'Авторский'),
-        ('GROUP', 'Групповой'),
-    )
+TYPE_TOUR_CHOICES = (
+    ('AUTHORS', 'Авторский'),
+    ('GROUP', 'Групповой'),
+)
 
-    COMFORT_LEVEL_CHOICES = (
-        ('Base', 'Базовый'),
-        ('Simple', 'Простой'),
-        ('Medium', 'Средний'),
-        ('Above_average', 'Выше среднего'),
-        ('High', 'Высокий'),
-    )
+COMFORT_LEVEL_CHOICES = (
+    ('Base', 'Базовый'),
+    ('Simple', 'Простой'),
+    ('Medium', 'Средний'),
+    ('Above_average', 'Выше среднего'),
+    ('High', 'Высокий'),
+)
 
-    INSURANCE_CONDITIONS_CHOICES = (
-        ('included', 'Страховка включена в стоимость тура'),
-        ('not_included', 'Страховка не включена в стоимость тура'),
-        ('required_not_included', 'Страховка обязательна и не включена в стоимость тура'),
-    )
+INSURANCE_CONDITIONS_CHOICES = (
+    ('includes', 'Страховка включена в стоимость тура'),
+    ('not_included', 'Страховка не включена в стоимость тура'),
+    ('required_not_included', 'Страховка обязательна и не включена в стоимость тура'),
+)
+
+
+class Tour(models.Model):
 
     title = models.CharField(max_length=300, verbose_name='Название тура')
-    language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, verbose_name='Языки')
+    description = models.TextField(max_length=999, verbose_name='Описание тура')
+
+    cancel_reservation = models.TextField(max_length=999, verbose_name='Условия отмены бронирования')
 
     amount_of_days = models.PositiveSmallIntegerField(verbose_name='Количество дней')
     min_people = models.PositiveSmallIntegerField(verbose_name='Минимальное количество человек')
@@ -57,13 +60,7 @@ class Tour(models.Model):
     tour_currency = models.CharField(max_length=50, choices=TOUR_CURRENCY_CHOICES, verbose_name='Валюта тура')
     insurance_conditions = models.CharField(max_length=200, choices=INSURANCE_CONDITIONS_CHOICES, verbose_name='Условия страхования')
     type_tour = models.CharField(max_length=200, choices=TYPE_TOUR_CHOICES, verbose_name='Тип тура')
-
-    included_in_the_price = models.TextField(max_length=5000, blank=True, verbose_name='Включено в стоимость')
-    not_included_in_the_price = models.TextField(max_length=5000, blank=True, verbose_name='Не включено в стоимость')
-    recommendations = models.TextField(max_length=1000, blank=True, verbose_name='Рекомендации для покупки билетов')
-    list_of_things = models.TextField(max_length=1000, blank=True, verbose_name='Cписок вещей')
-    address_point = models.TextField(max_length=999, verbose_name='Адрес точки сбора')
-    description_point = models.TextField(max_length=999, verbose_name='Комментарий для туриста')
+    language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, verbose_name='Языки')
 
     city = models.ManyToManyField(to=City, related_name='collection_point_city')
     activity = models.ManyToManyField(to=Activity, related_name='tour_activities')
@@ -98,15 +95,3 @@ class Tour(models.Model):
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
 
-
-class Question(models.Model):
-    question = models.CharField(max_length=1000, verbose_name='Вопрос')
-    answer = models.TextField(max_length=2000, verbose_name='Ответ')
-    tour = models.ForeignKey(to=Tour, on_delete=models.CASCADE, related_name='question')
-
-    def __str__(self) -> str:
-        return self.question
-
-    class Meta:
-        verbose_name = 'Вопрос ответ'
-        verbose_name_plural = 'Вопросы ответы'

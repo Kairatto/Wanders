@@ -7,8 +7,11 @@ apps/tour/migrations/0001_initial.py
 apps/days/migrations/0001_initial.py
 apps/guide/migrations/0001_initial.py
 apps/tags/migrations/0001_initial.py
-apps/impressions/migrations/0001_initial.py
-apps/cancel_reservation/migrations/0001_initial.py
+apps/includes/migrations/0001_initial.py
+apps/question/migrations/0001_initial.py
+apps/list_of_things/migrations/0001_initial.py
+apps/concrete_tour/migrations/0001_initial.py
+apps/collection_point/migrations/0001_initial.py
 apps/accommodation/migrations/0001_initial.py
 apps/tour_images/migrations/0001_initial.py
 apps/recommendations/migrations/0001_initial.py

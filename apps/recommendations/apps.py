@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ImpressionsConfig(AppConfig):
+class RecommendationsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.impressions'
+    name = 'apps.recommendations'

@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     'apps.tags',
     'apps.days',
     'apps.guide',
+    'apps.includes',
+    'apps.question',
     'apps.tour_images',
-    'apps.impressions',
     'apps.accommodation',
-    'apps.tour_description',
-    'apps.cancel_reservation',
-
+    'apps.concrete_tour',
+    'apps.list_of_things',
+    'apps.recommendations',
+    'apps.collection_point',
 
 ]
 
