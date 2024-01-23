@@ -1,73 +1,66 @@
 from rest_framework import serializers
-from .models import PlaceImages, Place, Accommodation, AccommodationImages, AnotherPlaceImages, AnotherPlace
+from .models import Place, PlaceResidence, PlaceResidenceImages
 
 
-class PlaceImagesSerializer(serializers.ModelSerializer):
+class PlaceResidenceImagesSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PlaceImages
+        model = PlaceResidenceImages
         fields = ('image',)
 
-
-class AnotherPlaceImagesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AnotherPlaceImages
-        fields = ('image',)
-
-
-class AccommodationImagesSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AccommodationImages
-        fields = ('image',)
+#
+# class AccommodationImagesSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = AccommodationImages
+#         fields = ('image',)
 
 
-class AnotherPlaceSerializer(serializers.ModelSerializer):
-    another_place_images = AnotherPlaceImagesSerializer(many=True)
+class PlaceResidenceSerializer(serializers.ModelSerializer):
+    place_residence_images = PlaceResidenceImagesSerializer(many=True)
 
     class Meta:
-        model = AnotherPlace
-        fields = ('title', 'description', 'amount_days', 'type_accommodation', 'another_place_images')
+        model = PlaceResidence
+        fields = ('title', 'description', 'type_accommodation', 'place_residence_images')
 
     def create(self, validated_data):
-        another_place_images_data = validated_data.pop('another_place_images')
-        another_place = AnotherPlace.objects.create(**validated_data)
+        place_residence_images_data = validated_data.pop('place_residence_images')
+        place_residence = PlaceResidence.objects.create(**validated_data)
 
-        for another_places_images_data in another_place_images_data:
-            AnotherPlaceImages.objects.create(another_place=another_place, **another_places_images_data)
+        for place_residence_image_data in place_residence_images_data:
+            PlaceResidenceImages.objects.create(place_residence=place_residence, **place_residence_image_data)
 
-        return another_place
+        return place_residence
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    place_images = PlaceImagesSerializer(many=True)
-    another_place = AnotherPlaceSerializer(many=True)
+    place_residence = PlaceResidenceSerializer(many=True)
 
     class Meta:
         model = Place
-        fields = ('title', 'description', 'amount_days', 'type_accommodation', 'place_images', 'another_place')
+        fields = ('amount_days', 'place_residence')
 
     def create(self, validated_data):
-        place_images_data = validated_data.pop('place_images')
+        place_residence_data = validated_data.pop('place_residence_data')
         place = Place.objects.create(**validated_data)
 
-        for places_images_data in place_images_data:
-            PlaceImages.objects.create(place=place, **places_images_data)
+        for places_residence_data in place_residence_data:
+            PlaceResidenceImages.objects.create(place=place, **places_residence_data)
 
         return place
 
-
-class AccommodationSerializer(serializers.ModelSerializer):
-
-    accommodation_images = AccommodationImagesSerializer(many=True)
-
-    class Meta:
-        model = Accommodation
-        fields = ('description', 'accommodation_images')
-
-    def create(self, validated_data):
-        accommodation_image_data = validated_data.pop('accommodation_images')
-        accommodations = Accommodation.objects.create(**validated_data)
-
-        for accommodation_images_data in accommodation_image_data:
-            AccommodationImages.objects.create(accommodation=accommodations, **accommodation_images_data)
-
-        return accommodations
+#
+# class AccommodationSerializer(serializers.ModelSerializer):
+#
+#     accommodation_images = AccommodationImagesSerializer(many=True)
+#
+#     class Meta:
+#         model = Accommodation
+#         fields = ('description', 'accommodation_images')
+#
+#     def create(self, validated_data):
+#         accommodation_image_data = validated_data.pop('accommodation_images')
+#         accommodations = Accommodation.objects.create(**validated_data)
+#
+#         for accommodation_images_data in accommodation_image_data:
+#             AccommodationImages.objects.create(accommodation=accommodations, **accommodation_images_data)
+#
+#         return accommodations

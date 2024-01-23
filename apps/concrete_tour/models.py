@@ -5,11 +5,6 @@ from apps.tour.models import Tour
 
 class ConcreteTour(models.Model):
     price_KGZ = models.PositiveSmallIntegerField(verbose_name='Стоимость тура за одно туриста в сомах')
-    price_RUB = models.PositiveSmallIntegerField(verbose_name='Стоимость тура за одно туриста в рублях')
-    price_USD = models.PositiveSmallIntegerField(verbose_name='Стоимость тура за одно туриста в долларах')
-
-    prepayment_period = models.PositiveSmallIntegerField(verbose_name='За сколько дней до начала тура внести предоплату')
-    prepayment_amount = models.PositiveSmallIntegerField(verbose_name='Размер предоплаты в %')
 
     tour = models.ForeignKey(
         to=Tour,

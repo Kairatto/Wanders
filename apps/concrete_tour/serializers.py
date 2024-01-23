@@ -13,7 +13,7 @@ class ConcreteTourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConcreteTour
-        fields = ('price_KGZ', 'price_RUB', 'price_USD', 'prepayment_period', 'prepayment_amount', 'concrete_tour_date')
+        fields = ('price_KGZ', 'concrete_tour_date')
 
     def create(self, validated_data):
         concrete_tour_date_data = validated_data.pop('concrete_tour_date')

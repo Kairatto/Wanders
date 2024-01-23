@@ -6,3 +6,7 @@ Pillow
 drf-yasg
 django-cors-headers
 python-decouple
+django-filter
+
+djangorestframework-simplejwt
+celery

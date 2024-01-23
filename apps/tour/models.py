@@ -35,6 +35,7 @@ COMFORT_LEVEL_CHOICES = (
     ('High', 'Высокий'),
 )
 
+
 INSURANCE_CONDITIONS_CHOICES = (
     ('includes', 'Страховка включена в стоимость тура'),
     ('not_included', 'Страховка не включена в стоимость тура'),
@@ -62,12 +63,12 @@ class Tour(models.Model):
     type_tour = models.CharField(max_length=200, choices=TYPE_TOUR_CHOICES, verbose_name='Тип тура')
     language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, verbose_name='Языки')
 
-    city = models.ManyToManyField(to=City, related_name='collection_point_city')
-    activity = models.ManyToManyField(to=Activity, related_name='tour_activities')
-    country = models.ManyToManyField(to=Country, related_name='tour_country')
-    collection = models.ManyToManyField(to=Collection, related_name='tour_collection')
-    location = models.ManyToManyField(to=Location, related_name='tour_location')
-    tourist_region = models.ManyToManyField(to=TouristRegion, related_name='tourist_region')
+    city = models.ManyToManyField(to=City, )
+    activity = models.ManyToManyField(to=Activity, )
+    country = models.ManyToManyField(to=Country, )
+    collection = models.ManyToManyField(to=Collection, )
+    location = models.ManyToManyField(to=Location, )
+    tourist_region = models.ManyToManyField(to=TouristRegion, )
 
     create_date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     is_active = models.BooleanField(default=True, verbose_name='Активный')
@@ -94,4 +95,3 @@ class Tour(models.Model):
     class Meta:
         verbose_name = 'Тур'
         verbose_name_plural = 'Туры'
-

@@ -1,0 +1,129 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Gilroy, sans-serif;
+   
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.title__hello {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+    gap: 5px;
+}
+
+.title {
+    border-radius: 30px;
+    background: #ECECEC;
+    text-align: center;
+
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%;
+    padding: 24px 0;
+}
+
+.first_section {
+    margin-top: 20px;
+}
+
+span {
+    display: block;
+}
+
+.second_section {
+    margin-top: 20px;
+    position: relative;
+}
+
+.second_section h4 {
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 100%;
+}
+
+.second_section p {
+    color: var(--, #282828);
+    text-align: center;
+    font-family: Averta Demo PE, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    padding: 15px 0 20px 0;
+}
+
+.second_section button {
+    border-radius: 15px;
+    background-color: #282828;
+    padding: 10px 15px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.second_section .title {
+    padding: 32px 0 ;
+}
+
+footer .container p {
+    text-align: center;
+    color: #282828;
+
+    font-family: Averta Demo PE, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 110%;
+    padding: 20px 0;
+}
+
+.second_section img {
+    position: absolute;
+    /* z-index: -1px; */
+    top: -23px;
+    right: 269px;
+    height: 67px;
+
+}
+
+.second_section .container {
+    position: relative;
+}
+
+
+.green_block {
+    position: absolute;
+    left: 16px;
+    top: -30px;
+    transform: rotate(-10deg);
+    padding: 15px 25px 15px 20px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 20px;
+    background: #0FA958;
+    max-width: 180px;
+
+    color: #FFF;
+    font-family: Averta Demo PE;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+}
+
+a {
+    color: unset;
+    text-decoration: unset;
+}
