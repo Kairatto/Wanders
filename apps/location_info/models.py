@@ -2,24 +2,24 @@ from django.db import models
 from slugify import slugify
 
 from apps.tour.models import Tour
-from apps.tags.models import Activity, City, Country, Collection, Location, TouristRegion
+from apps.tags.models import Activity, MainLocation, Country, Collection, Location, TouristRegion
 
 
 class LocationInfo(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Информация локации')
-    short_description = models.TextField(max_length=999, blank=True,  verbose_name='Краткое описнаие локации')
-    description = models.TextField(max_length=999, blank=True,  verbose_name='Описнаие локации')
-    how_to_get_there = models.TextField(max_length=999, blank=True,  verbose_name='Как добраться?')
-    coordinates = models.CharField(max_length=300, verbose_name='Координаты')
-    coordinates_map = models.CharField(max_length=300, verbose_name='Координаты на карте')
+    title = models.CharField(max_length=10000, verbose_name='Информация локации')
+    short_description = models.TextField(max_length=10000, blank=True,  verbose_name='Краткое описнаие локации')
+    description = models.TextField(max_length=10000, blank=True,  verbose_name='Описнаие локации')
+    how_to_get_there = models.TextField(max_length=10000, blank=True,  verbose_name='Как добраться?')
+    coordinates = models.CharField(max_length=10000, verbose_name='Координаты')
+    coordinates_map = models.CharField(max_length=10000, verbose_name='Координаты на карте')
 
-    city = models.ManyToManyField(to=City, )
+    main_location = models.ManyToManyField(to=MainLocation, )
     activity = models.ManyToManyField(to=Activity,)
     country = models.ManyToManyField(to=Country, )
     collection = models.ManyToManyField(to=Collection,)
     location = models.ManyToManyField(to=Location, )
     tourist_region = models.ManyToManyField(to=TouristRegion, )
-    slug = models.SlugField(max_length=300, unique=True, blank=True)
+    slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
         return self.title
@@ -54,10 +54,10 @@ class LocationInfoImage(models.Model):
 
 
 class GettingThere(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Название варианта')
-    travel_time = models.CharField(max_length=300, verbose_name='Время в пути')
-    price_travel = models.CharField(max_length=300, verbose_name='Стоимость проезда')
-    description = models.TextField(max_length=999, blank=True,  verbose_name='Описание')
+    title = models.CharField(max_length=10000, verbose_name='Название варианта')
+    travel_time = models.CharField(max_length=10000, verbose_name='Время в пути')
+    price_travel = models.CharField(max_length=10000, verbose_name='Стоимость проезда')
+    description = models.TextField(max_length=10000, blank=True,  verbose_name='Описание')
 
     location_info = models.ForeignKey(
         to=LocationInfo,

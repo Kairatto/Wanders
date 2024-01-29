@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.tags.views import (CityCreate, CityDetail, CityList,
+from apps.tags.views import (MainLocationCreate, MainLocationDetail, MainLocationList,
                              CountryCreate, CountryDetail, CountryList,
                              ActivityCreate, ActivityDetail, ActivityList,
                              LocationCreate, LocationDetail, LocationList,
@@ -9,9 +9,9 @@ from apps.tags.views import (CityCreate, CityDetail, CityList,
 
 
 urlpatterns = [
-    path('city_create/', CityCreate.as_view(), name='city-create'),
-    path('city_list/', CityList.as_view(), name='city-list'),
-    path('city/<str:slug>/', CityDetail.as_view(), name='city-detail'),
+    path('main_location_create/', MainLocationCreate.as_view(), name='main-location-create'),
+    path('main_location_list/', MainLocationList.as_view(), name='main-location-list'),
+    path('main_location/<str:slug>/', MainLocationDetail.as_view(), name='main-location-detail'),
 
     path('collection_create/', CollectionCreate.as_view(), name='collection-create'),
     path('collection_list/', CollectionList.as_view(), name='collection-list'),

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.tags.models import City, Country, Collection, Location, Activity, TouristRegion
+from apps.tags.models import MainLocation, Country, Collection, Location, Activity, TouristRegion
 
 
 def validate_unique(model, field_name, value):
@@ -21,14 +21,14 @@ class ActivitySerializer(serializers.ModelSerializer):
         return validate_unique(Activity, 'activity', value)
 
 
-class CitySerializer(serializers.ModelSerializer):
+class MainLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = City
-        fields = ('slug', 'city', )
+        model = MainLocation
+        fields = ('slug', 'main_location', )
 
     def validate_city(self, value):
-        return validate_unique(City, 'city', value)
+        return validate_unique(MainLocation, 'main_location', value)
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -78,11 +78,11 @@ class ActivityBunchSerializer(serializers.ModelSerializer):
         fields = ('slug', 'activity',)
 
 
-class CityBunchSerializer(serializers.ModelSerializer):
+class MainLocationBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = City
-        fields = ('slug', 'city', )
+        model = MainLocation
+        fields = ('slug', 'main_location', )
 
 
 class CountryBunchSerializer(serializers.ModelSerializer):

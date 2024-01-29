@@ -2,14 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
-from .models import City, Country, Collection, Location, Activity, TouristRegion
-from .serializers import (CollectionSerializer, CitySerializer, LocationSerializer,
+from .models import MainLocation, Country, Collection, Location, Activity, TouristRegion
+from .serializers import (CollectionSerializer, MainLocationSerializer, LocationSerializer,
                           ActivitySerializer, TouristRegionSerializer, CountrySerializer)
 
 
-class CityCreate(APIView):
+class MainLocationCreate(APIView):
     def post(self, request, format=None):
-        serializer = CitySerializer(data=request.data)
+        serializer = MainLocationSerializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
@@ -18,14 +18,14 @@ class CityCreate(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CityList(generics.ListAPIView):
-    queryset = City.objects.all()
-    serializer_class = CitySerializer
+class MainLocationList(generics.ListAPIView):
+    queryset = MainLocation.objects.all()
+    serializer_class = MainLocationSerializer
 
 
-class CityDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = City.objects.all()
-    serializer_class = CitySerializer
+class MainLocationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = MainLocation.objects.all()
+    serializer_class = MainLocationSerializer
     lookup_field = 'slug'
 
 

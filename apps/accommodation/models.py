@@ -56,9 +56,9 @@ class Place(models.Model):
 
 
 class PlaceResidence(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Название проживания')
-    description = models.TextField(max_length=999, blank=True, verbose_name='Описание проживания')
-    type_accommodation = models.CharField(max_length=200, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
+    title = models.CharField(max_length=10000, verbose_name='Название проживания')
+    description = models.TextField(max_length=10000, blank=True, verbose_name='Описание проживания')
+    type_accommodation = models.CharField(max_length=10000, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
     place = models.ForeignKey(
         to=Place,
         on_delete=models.CASCADE,

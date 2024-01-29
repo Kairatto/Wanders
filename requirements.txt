@@ -1,7 +1,7 @@
 django
 djangorestframework
 python-slugify
-psycopg2
+psycopg2-binary
 Pillow
 drf-yasg
 django-cors-headers
@@ -10,3 +10,4 @@ django-filter
 
 djangorestframework-simplejwt
 celery
+redis

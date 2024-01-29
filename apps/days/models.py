@@ -4,8 +4,8 @@ from apps.tour.models import Tour
 
 
 class Days(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Название дня')
-    description = models.TextField(max_length=999, blank=True,  verbose_name='Описание дня')
+    title = models.CharField(max_length=10000, verbose_name='Название дня')
+    description = models.TextField(max_length=10000, blank=True,  verbose_name='Описание дня')
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,

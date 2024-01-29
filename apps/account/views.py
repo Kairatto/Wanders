@@ -12,7 +12,8 @@ from .serializers import (
     RestorePasswordSerializer,
     SetRestoredPasswordSerializer,
     UserRetrieveSerializer
-)
+    )
+
 
 User = get_user_model()
 
@@ -23,10 +24,10 @@ class RegistrationView(APIView):
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(
-                'Спасибо за регистрацию! Активируйте аккаунт',
+                'Спасибо за регистрацию! Активируйте аккаунт', 
                 status=status.HTTP_201_CREATED
             )
-
+        
 
 class UserRetrieveView(APIView):
     def get(self, request: Request, username):
@@ -36,23 +37,23 @@ class UserRetrieveView(APIView):
             return Response(serializer)
         except User.DoesNotExist:
             raise Http404
+        
 
-
-class EmailActivationView(APIView):
+class EmailActivationView(APIView):   
     def get(self, request, activation_code):
         user = User.objects.filter(activation_code=activation_code).first()
         if not user:
             return Response(
-                'Страница не найдена.',
+                'Page not found.',
                 status=status.HTTP_404_NOT_FOUND
-            )
-        user.is_active = True
+                )
+        user.is_active = True       
         user.activation_code = ''
         user.save()
         return Response(
-            'Аккаунт активирован. Вы можете войти в систему',
+            'Account activated. You can login now.',
             status=status.HTTP_200_OK
-        )
+            )
 
 
 class ChangePasswordView(APIView):
@@ -68,8 +69,8 @@ class ChangePasswordView(APIView):
             )
 
 
-class RestorePasswordView(APIView):
-    def post(self, request):
+class RestorePasswordView(APIView): 
+    def post(self, request):  
         serializer = RestorePasswordSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.send_code()
@@ -79,8 +80,8 @@ class RestorePasswordView(APIView):
             )
 
 
-class SetRestoredPasswordView(APIView):
-    def post(self, request: Request):
+class SetRestoredPasswordView(APIView):  
+    def post(self, request: Request): 
         serializer = SetRestoredPasswordSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             serializer.set_new_password()

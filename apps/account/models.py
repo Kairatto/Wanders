@@ -4,10 +4,10 @@ from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-
-    def _create(self, username, email, password, **extra_fields):
+    
+    def _create(self, username, email, password, **extra_fields): 
         if not username and email:
-            raise ValueError('Пользователь должен иметь имя пользователя и адрес электронной почты')
+            raise ValueError('User must have username and email')
         user = self.model(
             username=username,
             email=email,
@@ -38,7 +38,7 @@ class User(AbstractBaseUser):
 
     username = models.CharField(max_length=50, primary_key=True, unique=True)
     email = models.CharField(max_length=255, unique=True)
-    is_business = models.BooleanField(default=False)
+    # is_business = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
@@ -48,7 +48,7 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']  # check
+    REQUIRED_FIELDS = ['email']
 
     def has_module_perms(self, app_label):
         return self.is_staff

@@ -4,7 +4,7 @@ from apps.tour.models import Tour
 
 
 class Recommendations(models.Model):
-    title = models.CharField(max_length=300, verbose_name='Рекомендация для покупки билетов')
+    title = models.CharField(max_length=10000, verbose_name='Рекомендация для покупки билетов')
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,

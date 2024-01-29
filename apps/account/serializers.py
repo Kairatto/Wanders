@@ -21,7 +21,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'The username is taken. choose another one.'
                 )
-        if not username.replace('_', '').replace('.', '').isalnum():
+        if not username.replace('_', '').replace('.', '').isalnum(): 
             raise serializers.ValidationError('Username can only contain letters, numbers, an \'_\' and \'.\'')
         if '_.' in username or '._' in username:
             raise serializers.ValidationError('\'_\' and \'.\' cannot stand next to each other')
@@ -36,11 +36,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Пароли не совпадают.')
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data): 
         user = User.objects.create_user(**validated_data)
         user.create_activation_code()
         send_activation_code.delay(user.email, user.activation_code)
-        return user
+        return user 
 
 
 # class ActivationSerializer(serializers.Serializer):
@@ -113,7 +113,7 @@ class RestorePasswordSerializer(serializers.Serializer):
     def send_code(self):
         user = self.context.get('request').user
         # print(user)
-        # user_email =
+        # user_email = 
         user = User.objects.get(username=user)
         # print(user)
         user.create_activation_code()
@@ -131,7 +131,7 @@ class SetRestoredPasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 'Некорректный код.'
             )
-        return code
+        return code 
 
     def validate(self, attrs):
         new_password = attrs.get('new_password')
@@ -142,7 +142,7 @@ class SetRestoredPasswordSerializer(serializers.Serializer):
             )
         return attrs
 
-    def set_new_password(self):
+    def set_new_password(self): 
         # email = self.validated_data.get('email')
         # user = User.objects.get(email=email)
         user = self.context.get('request').user

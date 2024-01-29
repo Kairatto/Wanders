@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'apps.tour',
     'apps.tags',
     'apps.days',
-    'apps.user',
+    'apps.account',
     'apps.guide',
     'apps.includes',
     'apps.question',
@@ -152,7 +152,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'account.User'
 
 
 SIMPLE_JWT = {
@@ -203,15 +203,23 @@ REST_FRAMEWORK = {
 }
 
 
-EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = config('EMAIL_PORT', default = 587)
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = 'Kairattoss@gmail.com'
+EMAIL_HOST_PASSWORD = 'KairattoSS135790'
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
+
+# settings.py
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+#
 
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
+
+

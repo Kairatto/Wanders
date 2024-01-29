@@ -4,8 +4,8 @@ from apps.tour.models import Tour
 
 
 class Guide(models.Model):
-    first_name = models.CharField(max_length=300, verbose_name='Имя гида')
-    last_name = models.CharField(max_length=300, verbose_name='Фамилия гида')
+    first_name = models.CharField(max_length=10000, verbose_name='Имя гида')
+    last_name = models.CharField(max_length=10000, verbose_name='Фамилия гида')
     description = models.TextField(blank=True, verbose_name='Описание гида')
     photo = models.ImageField(upload_to='avatar_guide', blank=True)
     tour = models.ForeignKey(

@@ -11,10 +11,10 @@ from apps.recommendations.models import Recommendations
 from apps.collection_point.models import CollectionPoint
 from apps.concrete_tour.models import ConcreteTour, ConcreteTourDate
 from apps.accommodation.models import (PlaceResidence, PlaceResidenceImages, Place)
-from apps.tags.models import Collection, Country, Activity, Location, TouristRegion, City
+from apps.tags.models import Collection, Country, Activity, Location, TouristRegion, MainLocation
 
 from apps.tags.serializers import (CollectionBunchSerializer, CountryBunchSerializer, LocationBunchSerializer,
-                                   TouristRegionBunchSerializer, ActivityBunchSerializer, CityBunchSerializer)
+                                   TouristRegionBunchSerializer, ActivityBunchSerializer, MainLocationBunchSerializer)
 from apps.includes.serializers import NotIncludedSerializer, IncludedSerializer
 from apps.collection_point.serializers import CollectionPointSerializer
 from apps.recommendations.serializers import RecommendationsSerializer
@@ -42,7 +42,7 @@ class TourSerializer(serializers.ModelSerializer):
     guide = GuideSerializer(many=True, required=False)
     days = DaysSerializer(many=True, required=False)
 
-    city = CityBunchSerializer(many=True, required=False)
+    main_location = MainLocationBunchSerializer(many=True, required=False)
     country = CountryBunchSerializer(many=True, required=False)
     activity = ActivityBunchSerializer(many=True, required=False)
     location = LocationBunchSerializer(many=True, required=False)
@@ -56,7 +56,7 @@ class TourSerializer(serializers.ModelSerializer):
                   'insurance_conditions', 'cancel_reservation', 'tour_images', 'concrete_tour', 'collection_point',
                   'recommendations', 'list_of_things', 'included', 'not_included', 'days', 'place',
                   'guide', 'question', 'activity', 'country', 'collection', 'location',
-                  'tourist_region', 'city', 'is_active', 'create_date')
+                  'tourist_region', 'main_location', 'is_active', 'create_date')
 
     def create(self, validated_data):
         collection_point_data = validated_data.pop('collection_point', [])
@@ -72,7 +72,7 @@ class TourSerializer(serializers.ModelSerializer):
         place_data = validated_data.pop('place', [])
         days_data = validated_data.pop('days', [])
 
-        city_data = validated_data.pop('city', [])
+        main_location_data = validated_data.pop('main_location', [])
         countries_data = validated_data.pop('country', [])
         locations_data = validated_data.pop('location', [])
         activities_data = validated_data.pop('activity', [])
@@ -81,16 +81,16 @@ class TourSerializer(serializers.ModelSerializer):
 
         tour = Tour.objects.create(**validated_data)
 
-        tour.city.set([City.objects.get_or_create(**data)[0] for data in city_data])
+        tour.main_location.set([MainLocation.objects.get_or_create(**data)[0] for data in main_location_data])
         tour.country.set([Country.objects.get_or_create(**data)[0] for data in countries_data])
         tour.location.set([Location.objects.get_or_create(**data)[0] for data in locations_data])
         tour.activity.set([Activity.objects.get_or_create(**data)[0] for data in activities_data])
         tour.collection.set([Collection.objects.get_or_create(**data)[0] for data in collections_data])
         tour.tourist_region.set([TouristRegion.objects.get_or_create(**data)[0] for data in tourist_regions_data])
 
-        for cities_data in city_data:
-            city, created = City.objects.get_or_create(**cities_data)
-            tour.city.add(city)
+        for main_locations_data in main_location_data:
+            main_location, created = MainLocation.objects.get_or_create(**main_locations_data)
+            tour.main_location.add(main_location)
 
         for activity_data in activities_data:
             activity, created = Activity.objects.get_or_create(**activity_data)

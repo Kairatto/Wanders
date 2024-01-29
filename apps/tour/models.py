@@ -1,7 +1,7 @@
 from django.db import models
 from slugify import slugify
 
-from apps.tags.models import Activity, City, Country, Collection, Location, TouristRegion
+from apps.tags.models import Activity, MainLocation, Country, Collection, Location, TouristRegion
 
 
 LANGUAGE_CHOICES = (
@@ -45,10 +45,10 @@ INSURANCE_CONDITIONS_CHOICES = (
 
 class Tour(models.Model):
 
-    title = models.CharField(max_length=300, verbose_name='Название тура')
-    description = models.TextField(max_length=999, verbose_name='Описание тура')
+    title = models.CharField(max_length=10000, verbose_name='Название тура')
+    description = models.TextField(max_length=10000, verbose_name='Описание тура')
 
-    cancel_reservation = models.TextField(max_length=999, verbose_name='Условия отмены бронирования')
+    cancel_reservation = models.TextField(max_length=10000, verbose_name='Условия отмены бронирования')
 
     amount_of_days = models.PositiveSmallIntegerField(verbose_name='Количество дней')
     min_people = models.PositiveSmallIntegerField(verbose_name='Минимальное количество человек')
@@ -56,14 +56,14 @@ class Tour(models.Model):
     min_age = models.PositiveSmallIntegerField(verbose_name='Минимальный возраст человека')
     max_age = models.PositiveSmallIntegerField(verbose_name='Максимальный возраст человека')
 
-    difficulty_level = models.CharField(max_length=50, choices=DIFFICULTY_LEVEL_CHOICES, verbose_name='Уровень сложности')
-    comfort_level = models.CharField(max_length=200, choices=COMFORT_LEVEL_CHOICES, verbose_name='Уровень комфорта в туре')
-    tour_currency = models.CharField(max_length=50, choices=TOUR_CURRENCY_CHOICES, verbose_name='Валюта тура')
-    insurance_conditions = models.CharField(max_length=200, choices=INSURANCE_CONDITIONS_CHOICES, verbose_name='Условия страхования')
-    type_tour = models.CharField(max_length=200, choices=TYPE_TOUR_CHOICES, verbose_name='Тип тура')
-    language = models.CharField(max_length=50, choices=LANGUAGE_CHOICES, verbose_name='Языки')
+    difficulty_level = models.CharField(max_length=10000, choices=DIFFICULTY_LEVEL_CHOICES, verbose_name='Уровень сложности')
+    comfort_level = models.CharField(max_length=10000, choices=COMFORT_LEVEL_CHOICES, verbose_name='Уровень комфорта в туре')
+    tour_currency = models.CharField(max_length=10000, choices=TOUR_CURRENCY_CHOICES, verbose_name='Валюта тура')
+    insurance_conditions = models.CharField(max_length=10000, choices=INSURANCE_CONDITIONS_CHOICES, verbose_name='Условия страхования')
+    type_tour = models.CharField(max_length=10000, choices=TYPE_TOUR_CHOICES, verbose_name='Тип тура')
+    language = models.CharField(max_length=10000, choices=LANGUAGE_CHOICES, verbose_name='Языки')
 
-    city = models.ManyToManyField(to=City, )
+    main_location = models.ManyToManyField(to=MainLocation, )
     activity = models.ManyToManyField(to=Activity, )
     country = models.ManyToManyField(to=Country, )
     collection = models.ManyToManyField(to=Collection, )
@@ -72,7 +72,7 @@ class Tour(models.Model):
 
     create_date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     is_active = models.BooleanField(default=True, verbose_name='Активный')
-    slug = models.SlugField(max_length=300, unique=True, blank=True)
+    slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
         return self.title
