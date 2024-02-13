@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.tags.models import MainLocation, Country, Collection, Location, Activity, TouristRegion
+from apps.tags.models import MainLocation, Country, Collection, Location, TouristRegion
 
 
 def validate_unique(model, field_name, value):
@@ -11,14 +11,14 @@ def validate_unique(model, field_name, value):
     return value
 
 
-class ActivitySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Activity
-        fields = ('slug', 'activity',)
-
-    def validate_activity(self, value):
-        return validate_unique(Activity, 'activity', value)
+# class ActivitySerializer(serializers.ModelSerializer):
+#
+#     class Meta:
+#         model = Activity
+#         fields = ('slug', 'activity',)
+#
+#     def validate_activity(self, value):
+#         return validate_unique(Activity, 'activity', value)
 
 
 class MainLocationSerializer(serializers.ModelSerializer):
@@ -71,43 +71,43 @@ class TouristRegionSerializer(serializers.ModelSerializer):
         return validate_unique(TouristRegion, 'region', value)
 
 
-class ActivityBunchSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Activity
-        fields = ('slug', 'activity',)
+# class ActivityBunchSerializer(serializers.ModelSerializer):
+#
+#     class Meta:
+#         model = Activity
+#         fields = ('slug', 'activity',)
 
 
 class MainLocationBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MainLocation
-        fields = ('slug', 'main_location', )
+        fields = ('main_location', )
 
 
 class CountryBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = ('slug', 'country', )
+        fields = ('country', )
 
 
 class CollectionBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ('slug', 'collection', )
+        fields = ('collection', )
 
 
 class LocationBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ('slug', 'location', )
+        fields = ('location', )
 
 
 class TouristRegionBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TouristRegion
-        fields = ('slug', 'region', )
+        fields = ('region', )

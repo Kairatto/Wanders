@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
@@ -20,11 +21,15 @@ class LocationInfoCreate(APIView):
 class LocationInfoDevList(generics.ListAPIView):
     queryset = LocationInfo.objects.all()
     serializer_class = LocationInfoSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['slug']
 
 
 class LocationInfoList(generics.ListAPIView):
     queryset = LocationInfo.objects.all()
     serializer_class = LocationInfoSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['slug']
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()

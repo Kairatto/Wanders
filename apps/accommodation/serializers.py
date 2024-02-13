@@ -15,11 +15,21 @@ class PlaceResidenceImagesSerializer(serializers.ModelSerializer):
 
 
 class PlaceResidenceSerializer(serializers.ModelSerializer):
-    place_residence_images = PlaceResidenceImagesSerializer(many=True)
+    place_residence_images = PlaceResidenceImagesSerializer(many=True, required=False)
 
     class Meta:
         model = PlaceResidence
         fields = ('title', 'description', 'type_accommodation', 'place_residence_images')
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        choice_fields = {'type_accommodation': dict(PlaceResidence.TYPE_ACCOMMODATION_CHOICES)}
+        for field, choices in choice_fields.items():
+            value = representation.get(field)
+            if value is not None:
+                representation[field] = choices.get(value)
+
+        return representation
 
     def create(self, validated_data):
         place_residence_images_data = validated_data.pop('place_residence_images')
