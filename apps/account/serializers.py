@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from django.conf import settings
 
 from .tasks import send_activation_code, send_change_password_code
 
@@ -41,28 +40,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         user.create_activation_code()
         send_activation_code.delay(user.email, user.activation_code)
         return user 
-
-
-# class ActivationSerializer(serializers.Serializer):
-#     username = serializers.CharField(max_length=50, required=True)
-#     code = serializers.CharField(max_length=10, required=True)
-
-#     def validate_user(self, username):
-#         if not User.objects.filter(username=username).exists():
-#             raise serializers.ValidationError('Пользователя с таким ником не существует.')
-#         return username
-
-#     def validate_code(self, code):
-#         if not User.objects.filter(activation_code=code).exists():
-#             raise serializers.ValidationError('Некорректный код.')
-#         return code
-
-#     def activate_account(self):
-#         username = self.validated_data.get('username')
-#         user = User.objects.get(username=username)
-#         user.is_active = True
-#         user.activation_code = ''
-#         user.save()
 
 
 class UserListSerializer(serializers.ModelSerializer):
@@ -112,10 +89,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 class RestorePasswordSerializer(serializers.Serializer):
     def send_code(self):
         user = self.context.get('request').user
-        # print(user)
-        # user_email = 
         user = User.objects.get(username=user)
-        # print(user)
         user.create_activation_code()
         print(user.email, user.activation_code)
         send_change_password_code.delay(user.email, user.activation_code)
@@ -142,9 +116,7 @@ class SetRestoredPasswordSerializer(serializers.Serializer):
             )
         return attrs
 
-    def set_new_password(self): 
-        # email = self.validated_data.get('email')
-        # user = User.objects.get(email=email)
+    def set_new_password(self):
         user = self.context.get('request').user
         user = User.objects.get(username=user)
         new_password = self.validated_data.get('new_password')

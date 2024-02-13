@@ -38,7 +38,7 @@ class User(AbstractBaseUser):
 
     username = models.CharField(max_length=50, primary_key=True, unique=True)
     email = models.CharField(max_length=255, unique=True)
-    # is_business = models.BooleanField(default=False)
+    is_business = models.BooleanField(default=False) 
     is_verified = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

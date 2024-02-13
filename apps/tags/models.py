@@ -29,31 +29,31 @@ class Collection(models.Model):
         verbose_name_plural = 'Подборки'
 
 
-class Activity(models.Model):
-    activity = models.CharField(max_length=10000)
-    slug = models.SlugField(max_length=10000, unique=True, blank=True)
-
-    def __str__(self) -> str:
-        return self.activity
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = ""
-        super().save(*args, **kwargs)
-
-        if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.activity}")
-            slug = base_slug
-            counter = 1
-            while Activity.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-            self.save()
-
-    class Meta:
-        verbose_name = 'Активность'
-        verbose_name_plural = 'Активности'
+# class Activity(models.Model):
+#     activity = models.CharField(max_length=10000)
+#     slug = models.SlugField(max_length=10000, unique=True, blank=True)
+#
+#     def __str__(self) -> str:
+#         return self.activity
+#
+#     def save(self, *args, **kwargs):
+#         if not self.slug:
+#             self.slug = ""
+#         super().save(*args, **kwargs)
+#
+#         if not self.slug:
+#             base_slug = slugify(f"{self.id}-{self.activity}")
+#             slug = base_slug
+#             counter = 1
+#             while Activity.objects.filter(slug=slug).exists():
+#                 slug = f"{base_slug}-{counter}"
+#                 counter += 1
+#             self.slug = slug
+#             self.save()
+#
+#     class Meta:
+#         verbose_name = 'Активность'
+#         verbose_name_plural = 'Активности'
 
 
 class Country(models.Model):
@@ -142,7 +142,7 @@ class MainLocation(models.Model):
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.city
+        return self.main_location
 
     def save(self, *args, **kwargs):
         if not self.slug:

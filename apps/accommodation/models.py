@@ -3,19 +3,6 @@ from django.db import models
 from apps.tour.models import Tour
 
 
-TYPE_ACCOMMODATION_CHOICES = (
-        ('Tent', 'Палатка'),
-        ('Glamping', 'Глэмпинг'),
-        ('Hostel', 'Гостинница'),
-        ('Hotel', 'Отель'),
-        ('Holiday House', 'Дом отдыха'),
-        ('Apartments', 'Апартаменты'),
-        ('Camp site', 'Турбаза'),
-        ('Sanatorium', 'Санаторий'),
-        ('Villa', 'Вилла'),
-    )
-
-
 # class Accommodation(models.Model):
 #     description = models.TextField(max_length=999, verbose_name='Общее описание проживания')
 #     tour = models.ForeignKey(
@@ -56,6 +43,19 @@ class Place(models.Model):
 
 
 class PlaceResidence(models.Model):
+
+    TYPE_ACCOMMODATION_CHOICES = (
+        ('Tent', 'Палатка'),
+        ('Glamping', 'Глэмпинг'),
+        ('Hostel', 'Гостинница'),
+        ('Hotel', 'Отель'),
+        ('Holiday House', 'Дом отдыха'),
+        ('Apartments', 'Апартаменты'),
+        ('Camp site', 'Турбаза'),
+        ('Sanatorium', 'Санаторий'),
+        ('Villa', 'Вилла'),
+    )
+
     title = models.CharField(max_length=10000, verbose_name='Название проживания')
     description = models.TextField(max_length=10000, blank=True, verbose_name='Описание проживания')
     type_accommodation = models.CharField(max_length=10000, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
@@ -74,7 +74,7 @@ class PlaceResidence(models.Model):
 
 
 class PlaceResidenceImages(models.Model):
-    image = models.ImageField(upload_to='place_images')
+    image = models.ImageField(upload_to='place_images', blank=False)
     place_residence = models.ForeignKey(
         to=PlaceResidence,
         on_delete=models.CASCADE,

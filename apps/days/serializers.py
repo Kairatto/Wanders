@@ -9,7 +9,7 @@ class DaysImageSerializer(serializers.ModelSerializer):
 
 
 class DaysSerializer(serializers.ModelSerializer):
-    days_images = DaysImageSerializer(many=True)
+    days_images = DaysImageSerializer(many=True, required=False)
 
     class Meta:
         model = Days

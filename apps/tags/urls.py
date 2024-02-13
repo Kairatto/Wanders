@@ -2,10 +2,10 @@ from django.urls import path
 
 from apps.tags.views import (MainLocationCreate, MainLocationDetail, MainLocationList,
                              CountryCreate, CountryDetail, CountryList,
-                             ActivityCreate, ActivityDetail, ActivityList,
+                             # ActivityCreate, ActivityDetail, ActivityList,
                              LocationCreate, LocationDetail, LocationList,
                              CollectionCreate, CollectionDetail, CollectionList,
-                             TouristRegionCreate, TouristRegionDetail, TouristRegionList)
+                             TouristRegionCreate, TouristRegionDetail, TouristRegionList, AllTagsView)
 
 
 urlpatterns = [
@@ -25,11 +25,14 @@ urlpatterns = [
     path('location_list/', LocationList.as_view(), name='location-list'),
     path('location/<str:slug>/', LocationDetail.as_view(), name='location-detail'),
 
-    path('activity_create/', ActivityCreate.as_view(), name='activity-create'),
-    path('activity_list/', ActivityList.as_view(), name='activity-list'),
-    path('activity/<str:slug>/', ActivityDetail.as_view(), name='activity-detail'),
+    # path('activity_create/', ActivityCreate.as_view(), name='activity-create'),
+    # path('activity_list/', ActivityList.as_view(), name='activity-list'),
+    # path('activity/<str:slug>/', ActivityDetail.as_view(), name='activity-detail'),
 
     path('tourist_region_create/', TouristRegionCreate.as_view(), name='tourist_region_create'),
     path('tourist_region_list/', TouristRegionList.as_view(), name='activity-list'),
     path('tourist_region/<str:slug>/', TouristRegionDetail.as_view(), name='activity-detail'),
+
+    path('all_tags/', AllTagsView.as_view(), name='all_tags'),
+
 ]
