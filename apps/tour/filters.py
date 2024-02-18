@@ -17,12 +17,13 @@ class TourFilter(drf_filters.FilterSet):
     price_KGZ = drf_filters.RangeFilter(field_name='concrete_tour__price_KGZ')
 
     type_accommodation = CharFilterInFilter(field_name='place__place_residence__type_accommodation', lookup_expr='in')
-    main_location = CharFilterInFilter(field_name='main_location__main_location', lookup_expr='in')
+    main_location = CharFilterInFilter(field_name='main_location', lookup_expr='in')
     tourist_region = CharFilterInFilter(field_name='tourist_region__region', lookup_expr='in')
     collection = CharFilterInFilter(field_name='collection__collection', lookup_expr='in')
     difficulty_level = CharFilterInFilter(field_name='difficulty_level', lookup_expr='in')
     # activity = CharFilterInFilter(field_name='activity__activity', lookup_expr='in')
     location = CharFilterInFilter(field_name='location__location', lookup_expr='in')
+    main_activity = CharFilterInFilter(field_name='main_activity', lookup_expr='in')
     comfort_level = CharFilterInFilter(field_name='comfort_level', lookup_expr='in')
     country = CharFilterInFilter(field_name='country__country', lookup_expr='in')
     type_tour = CharFilterInFilter(field_name='type_tour', lookup_expr='in')
@@ -31,7 +32,7 @@ class TourFilter(drf_filters.FilterSet):
     class Meta:
         model = Tour
         fields = [
-            'price_KGZ', 'amount_of_days', 'type_accommodation', 'main_location',
+            'price_KGZ', 'amount_of_days', 'type_accommodation', 'main_location', 'main_activity',
             'tourist_region', 'collection', 'difficulty_level', 'location',
             'comfort_level', 'country', 'type_tour', 'language',
         ]

@@ -137,28 +137,28 @@ class Location(models.Model):
         verbose_name_plural = 'Локации'
 
 
-class MainLocation(models.Model):
-    main_location = models.CharField(max_length=10000)
-    slug = models.SlugField(max_length=10000, unique=True, blank=True)
-
-    def __str__(self) -> str:
-        return self.main_location
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = ""
-        super().save(*args, **kwargs)
-
-        if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.main_location}")
-            slug = base_slug
-            counter = 1
-            while MainLocation.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-            self.save()
-
-    class Meta:
-        verbose_name = 'Основная локация'
-        verbose_name_plural = 'Основная локации'
+# class MainLocation(models.Model):
+#     main_location = models.CharField(max_length=10000)
+#     slug = models.SlugField(max_length=10000, unique=True, blank=True)
+#
+#     def __str__(self) -> str:
+#         return self.main_location
+#
+#     def save(self, *args, **kwargs):
+#         if not self.slug:
+#             self.slug = ""
+#         super().save(*args, **kwargs)
+#
+#         if not self.slug:
+#             base_slug = slugify(f"{self.id}-{self.main_location}")
+#             slug = base_slug
+#             counter = 1
+#             while MainLocation.objects.filter(slug=slug).exists():
+#                 slug = f"{base_slug}-{counter}"
+#                 counter += 1
+#             self.slug = slug
+#             self.save()
+#
+#     class Meta:
+#         verbose_name = 'Основная локация'
+#         verbose_name_plural = 'Основная локации'

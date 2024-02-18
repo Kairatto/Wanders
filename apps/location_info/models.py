@@ -2,7 +2,7 @@ from django.db import models
 from slugify import slugify
 
 from apps.tour.models import Tour
-from apps.tags.models import MainLocation, Country, Collection, Location, TouristRegion
+from apps.tags.models import Country, Collection, Location, TouristRegion
 
 
 class LocationInfo(models.Model):
@@ -13,7 +13,7 @@ class LocationInfo(models.Model):
     coordinates = models.CharField(max_length=10000, verbose_name='Координаты')
     coordinates_map = models.CharField(max_length=10000, verbose_name='Координаты на карте')
 
-    main_location = models.ManyToManyField(to=MainLocation, )
+    # main_location = models.ManyToManyField(to=MainLocation, )
     # activity = models.ManyToManyField(to=Activity,)
     country = models.ManyToManyField(to=Country, )
     collection = models.ManyToManyField(to=Collection,)
