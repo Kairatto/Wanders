@@ -43,6 +43,7 @@ class TourListView(CommonTourListView):
                 'difficulty_level': item['difficulty_level'],
                 'tour_images': [image['image'] for image in item['tour_images']],
                 'main_location': item['main_location'],
+                'main_activity': item['main_activity'],
                 # 'activity': item['activity'],
                 'country': item['country'],
                 'collection': item['collection'],

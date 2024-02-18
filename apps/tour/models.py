@@ -1,7 +1,7 @@
 from django.db import models
 from slugify import slugify
 
-from apps.tags.models import MainLocation, Country, Collection, Location, TouristRegion
+from apps.tags.models import Country, Collection, Location, TouristRegion
 
 
 class Tour(models.Model):
@@ -42,9 +42,10 @@ class Tour(models.Model):
     )
 
     title = models.CharField(max_length=10000, verbose_name='Название тура')
-    description = models.TextField(max_length=10000, verbose_name='Описание тура')
+    description = models.TextField(max_length=3000, verbose_name='Описание тура')
 
-    cancel_reservation = models.TextField(max_length=10000, verbose_name='Условия отмены бронирования')
+    main_location = models.TextField(max_length=10000, verbose_name='Основная локация')
+    main_activity = models.TextField(max_length=10000, verbose_name='Основная активность')
 
     amount_of_days = models.PositiveSmallIntegerField(verbose_name='Количество дней')
     min_people = models.PositiveSmallIntegerField(verbose_name='Минимальное количество человек')
@@ -59,7 +60,7 @@ class Tour(models.Model):
     comfort_level = models.CharField(max_length=10000, choices=COMFORT_LEVEL_CHOICES, verbose_name='Уровень комфорта в туре')
     insurance_conditions = models.CharField(max_length=10000, choices=INSURANCE_CONDITIONS_CHOICES, verbose_name='Условия страхования')
 
-    main_location = models.ManyToManyField(to=MainLocation, )
+    # main_activity = models.ManyToManyField(to=MainLocation, )
     # activity = models.ManyToManyField(to=Activity, )
     country = models.ManyToManyField(to=Country, )
     collection = models.ManyToManyField(to=Collection, )

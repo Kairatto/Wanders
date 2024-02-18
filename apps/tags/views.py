@@ -2,31 +2,31 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
-from .models import MainLocation, Country, Collection, Location, TouristRegion
-from .serializers import (CollectionSerializer, MainLocationSerializer, LocationSerializer,
+from .models import Country, Collection, Location, TouristRegion
+from .serializers import (CollectionSerializer, LocationSerializer,
                           TouristRegionSerializer, CountrySerializer)
 
 
-class MainLocationCreate(APIView):
-    def post(self, request, format=None):
-        serializer = MainLocationSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class MainLocationList(generics.ListAPIView):
-    queryset = MainLocation.objects.all()
-    serializer_class = MainLocationSerializer
-
-
-class MainLocationDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = MainLocation.objects.all()
-    serializer_class = MainLocationSerializer
-    lookup_field = 'slug'
+# class MainLocationCreate(APIView):
+#     def post(self, request, format=None):
+#         serializer = MainLocationSerializer(data=request.data)
+#
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# class MainLocationList(generics.ListAPIView):
+#     queryset = MainLocation.objects.all()
+#     serializer_class = MainLocationSerializer
+#
+#
+# class MainLocationDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = MainLocation.objects.all()
+#     serializer_class = MainLocationSerializer
+#     lookup_field = 'slug'
 
 
 class CollectionCreate(APIView):
@@ -146,14 +146,14 @@ class AllTagsView(APIView):
         countries = Country.objects.all()
         tourist_regions = TouristRegion.objects.all()
         locations = Location.objects.all()
-        main_locations = MainLocation.objects.all()
+        # main_locations = MainLocation.objects.all()
 
         collection_serializer = CollectionSerializer(collections, many=True)
         # activity_serializer = ActivitySerializer(activities, many=True)
         country_serializer = CountrySerializer(countries, many=True)
         tourist_region_serializer = TouristRegionSerializer(tourist_regions, many=True)
         location_serializer = LocationSerializer(locations, many=True)
-        main_location_serializer = MainLocationSerializer(main_locations, many=True)
+        # main_location_serializer = MainLocationSerializer(main_locations, many=True)
 
         all_tags_data = {
             'collections': collection_serializer.data,
@@ -161,7 +161,7 @@ class AllTagsView(APIView):
             'countries': country_serializer.data,
             'tourist_regions': tourist_region_serializer.data,
             'locations': location_serializer.data,
-            'main_locations': main_location_serializer.data,
+            # 'main_locations': main_location_serializer.data,
         }
 
         return Response(all_tags_data)

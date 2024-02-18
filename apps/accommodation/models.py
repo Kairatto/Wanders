@@ -56,8 +56,8 @@ class PlaceResidence(models.Model):
         ('Villa', 'Вилла'),
     )
 
-    title = models.CharField(max_length=10000, verbose_name='Название проживания')
-    description = models.TextField(max_length=10000, blank=True, verbose_name='Описание проживания')
+    title = models.CharField(max_length=150, verbose_name='Название проживания')
+    description = models.TextField(max_length=1000, blank=True, verbose_name='Описание проживания')
     type_accommodation = models.CharField(max_length=10000, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
     place = models.ForeignKey(
         to=Place,
