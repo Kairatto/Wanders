@@ -3,19 +3,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
+from apps.tour.utils import BaseCreateAPIView
+
 from .models import LocationInfo
 from .serializers import LocationInfoSerializer
 
 
-class LocationInfoCreate(APIView):
-    def post(self, request, format=None):
-        serializer = LocationInfoSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class LocationInfoCreate(BaseCreateAPIView):
+    serializer_class = LocationInfoSerializer
 
 
 class LocationInfoDevList(generics.ListAPIView):
