@@ -5,15 +5,11 @@ from rest_framework import status, generics
 from apps.tour.filters import CommonTourListView
 from apps.tour.serializers import TourSerializer
 from apps.tour.models import Tour
+from apps.tour.utils import BaseCreateAPIView
 
 
-class TourCreate(APIView):
-    def post(self, request, format=None):
-        serializer = TourSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class TourCreate(BaseCreateAPIView):
+    serializer_class = TourSerializer
 
 
 class TourListDev(CommonTourListView):
@@ -34,7 +30,6 @@ class TourListView(CommonTourListView):
 
         filtered_data = []
         for item in data:
-            concrete_tour_dates = item['concrete_tour'][0]['concrete_tour_date']
 
             filtered_item = {
                 'slug': item['slug'],
@@ -44,13 +39,11 @@ class TourListView(CommonTourListView):
                 'tour_images': [image['image'] for image in item['tour_images']],
                 'main_location': item['main_location'],
                 'main_activity': item['main_activity'],
-                # 'activity': item['activity'],
                 'country': item['country'],
                 'collection': item['collection'],
                 'location': item['location'],
                 'tourist_region': item['tourist_region'],
-                'price_KGZ': item['concrete_tour'][0]['price_KGZ'],
-                'start_dates': [date['start_date'] for date in concrete_tour_dates],
+                'concrete_tour': item['concrete_tour'],
             }
 
             filtered_data.append(filtered_item)

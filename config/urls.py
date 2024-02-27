@@ -29,5 +29,6 @@ urlpatterns = [
     path('location/', include('apps.location_info.urls')),
     path('account/', include('apps.account.urls')),
     path('tags/', include('apps.tags.urls')),
+    path('guide/', include('apps.guide.urls')),
     path('review/', include('apps.review.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

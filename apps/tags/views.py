@@ -2,42 +2,112 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
-from .models import Country, Collection, Location, TouristRegion
-from .serializers import (CollectionSerializer, LocationSerializer,
-                          TouristRegionSerializer, CountrySerializer)
+from apps.tour.utils import BaseCreateAPIView
+
+from apps.tags.models import (Country, Collection, Location, TouristRegion, Language,
+                              InsuranceConditions, DifficultyLevel, ComfortLevel, TypeTour, TourCurrency)
+
+from apps.tags.serializers import (CollectionSerializer, LocationSerializer, TouristRegionSerializer, CountrySerializer,
+                                   TourCurrencyBunchSerializer, CollectionBunchSerializer, LocationBunchSerializer,
+                                   LanguageSerializer, InsuranceConditionsSerializer, DifficultyLevelSerializer,
+                                   TouristRegionBunchSerializer, CountryBunchSerializer, LanguageBunchSerializer,
+                                   ComfortLevelSerializer, TypeTourSerializer, TourCurrencySerializer,
+                                   InsuranceConditionsBunchSerializer, DifficultyLevelBunchSerializer,
+                                   ComfortLevelBunchSerializer, TypeTourBunchSerializer, )
 
 
-# class MainLocationCreate(APIView):
-#     def post(self, request, format=None):
-#         serializer = MainLocationSerializer(data=request.data)
-#
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class MainLocationList(generics.ListAPIView):
-#     queryset = MainLocation.objects.all()
-#     serializer_class = MainLocationSerializer
-#
-#
-# class MainLocationDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = MainLocation.objects.all()
-#     serializer_class = MainLocationSerializer
-#     lookup_field = 'slug'
+class TourCurrencyCreate(BaseCreateAPIView):
+    serializer_class = TourCurrencySerializer
 
 
-class CollectionCreate(APIView):
-    def post(self, request, format=None):
-        serializer = CollectionSerializer(data=request.data)
+class TourCurrencyList(generics.ListAPIView):
+    queryset = TourCurrency.objects.all()
+    serializer_class = TourCurrencySerializer
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class TourCurrencyDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TourCurrency.objects.all()
+    serializer_class = TourCurrencyBunchSerializer
+    lookup_field = 'slug'
+
+
+class TypeTourCreate(BaseCreateAPIView):
+    serializer_class = TypeTourSerializer
+
+
+class TypeTourList(generics.ListAPIView):
+    queryset = TypeTour.objects.all()
+    serializer_class = TypeTourSerializer
+
+
+class TypeTourDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TypeTour.objects.all()
+    serializer_class = TypeTourBunchSerializer
+    lookup_field = 'slug'
+
+
+class ComfortLevelCreate(BaseCreateAPIView):
+    serializer_class = ComfortLevelSerializer
+
+
+class ComfortLevelList(generics.ListAPIView):
+    queryset = ComfortLevel.objects.all()
+    serializer_class = ComfortLevelSerializer
+
+
+class ComfortLevelDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ComfortLevel.objects.all()
+    serializer_class = ComfortLevelBunchSerializer
+    lookup_field = 'slug'
+
+
+class DifficultyLevelCreate(BaseCreateAPIView):
+    serializer_class = DifficultyLevelSerializer
+
+
+class DifficultyLevelList(generics.ListAPIView):
+    queryset = DifficultyLevel.objects.all()
+    serializer_class = DifficultyLevelSerializer
+
+
+class DifficultyLevelDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DifficultyLevel.objects.all()
+    serializer_class = DifficultyLevelBunchSerializer
+    lookup_field = 'slug'
+
+
+class InsuranceConditionsCreate(BaseCreateAPIView):
+    serializer_class = InsuranceConditionsSerializer
+
+
+class InsuranceConditionsList(generics.ListAPIView):
+    queryset = InsuranceConditions.objects.all()
+    serializer_class = InsuranceConditionsSerializer
+
+
+class InsuranceConditionsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = InsuranceConditions.objects.all()
+    serializer_class = InsuranceConditionsBunchSerializer
+    lookup_field = 'slug'
+
+
+class LanguageCreate(BaseCreateAPIView):
+    serializer_class = LanguageSerializer
+
+
+class LanguageList(generics.ListAPIView):
+    queryset = Language.objects.all()
+    serializer_class = LanguageSerializer
+
+
+class LanguageDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Language.objects.all()
+    serializer_class = LanguageBunchSerializer
+    lookup_field = 'slug'
+
+
+class CollectionCreate(BaseCreateAPIView):
+    serializer_class = CollectionSerializer
 
 
 class CollectionList(generics.ListAPIView):
@@ -47,19 +117,12 @@ class CollectionList(generics.ListAPIView):
 
 class CollectionDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Collection.objects.all()
-    serializer_class = CollectionSerializer
+    serializer_class = CollectionBunchSerializer
     lookup_field = 'slug'
 
 
-class CountryCreate(APIView):
-    def post(self, request, format=None):
-        serializer = CountrySerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CountryCreate(BaseCreateAPIView):
+    serializer_class = CountrySerializer
 
 
 class CountryList(generics.ListAPIView):
@@ -69,19 +132,12 @@ class CountryList(generics.ListAPIView):
 
 class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Country.objects.all()
-    serializer_class = CountrySerializer
+    serializer_class = CountryBunchSerializer
     lookup_field = 'slug'
 
 
-class LocationCreate(APIView):
-    def post(self, request, format=None):
-        serializer = LocationSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class LocationCreate(BaseCreateAPIView):
+    serializer_class = LocationSerializer
 
 
 class LocationList(generics.ListAPIView):
@@ -91,8 +147,71 @@ class LocationList(generics.ListAPIView):
 
 class LocationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Location.objects.all()
-    serializer_class = LocationSerializer
+    serializer_class = LocationBunchSerializer
     lookup_field = 'slug'
+
+
+class TouristRegionCreate(BaseCreateAPIView):
+    serializer_class = TouristRegionSerializer
+
+
+class TouristRegionList(generics.ListAPIView):
+    queryset = TouristRegion.objects.all()
+    serializer_class = TouristRegionSerializer
+
+
+class TouristRegionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TouristRegion.objects.all()
+    serializer_class = TouristRegionBunchSerializer
+    lookup_field = 'slug'
+
+
+# language, insurance_conditions, difficulty_level, comfort_level, type_tour, tour_currency
+
+
+class AllTagsView(APIView):
+    def get(self, request, format=None):
+        collections = Collection.objects.all()
+        countries = Country.objects.all()
+        tourist_regions = TouristRegion.objects.all()
+        locations = Location.objects.all()
+
+        language = Language.objects.all()
+        insurance_conditions = InsuranceConditions.objects.all()
+        difficulty_level = DifficultyLevel.objects.all()
+        comfort_level = ComfortLevel.objects.all()
+        type_tour = TypeTour.objects.all()
+        tour_currency = TourCurrency.objects.all()
+
+        collection_serializer = CollectionSerializer(collections, many=True)
+        country_serializer = CountrySerializer(countries, many=True)
+        tourist_region_serializer = TouristRegionSerializer(tourist_regions, many=True)
+        location_serializer = LocationSerializer(locations, many=True)
+
+        language_serializer = LanguageSerializer(language, many=True)
+        insurance_conditions_serializer = InsuranceConditionsSerializer(insurance_conditions, many=True)
+        difficulty_level_serializer = DifficultyLevelSerializer(difficulty_level, many=True)
+        comfort_level_serializer = ComfortLevelSerializer(comfort_level, many=True)
+        type_tour_serializer = TypeTourSerializer(type_tour, many=True)
+        tour_currency_serializer = TourCurrencySerializer(tour_currency, many=True)
+
+        all_tags_data = {
+            'collection': collection_serializer.data,
+            'country': country_serializer.data,
+            'tourist_region': tourist_region_serializer.data,
+            'location': location_serializer.data,
+
+            'language': language_serializer.data,
+            'tour_currency': tour_currency_serializer.data,
+
+            'insurance_conditions': insurance_conditions_serializer.data,
+            'difficulty_level': difficulty_level_serializer.data,
+            'comfort_level': comfort_level_serializer.data,
+            'type_tour': type_tour_serializer.data,
+        }
+
+        return Response(all_tags_data)
+
 
 #
 # class ActivityCreate(APIView):
@@ -117,51 +236,23 @@ class LocationDetail(generics.RetrieveUpdateDestroyAPIView):
 #     lookup_field = 'slug'
 
 
-class TouristRegionCreate(APIView):
-    def post(self, request, format=None):
-        serializer = TouristRegionSerializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class TouristRegionList(generics.ListAPIView):
-    queryset = TouristRegion.objects.all()
-    serializer_class = TouristRegionSerializer
-
-
-class TouristRegionDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = TouristRegion.objects.all()
-    serializer_class = TouristRegionSerializer
-    lookup_field = 'slug'
-
-
-class AllTagsView(APIView):
-    def get(self, request, format=None):
-        collections = Collection.objects.all()
-        # activities = Activity.objects.all()
-        countries = Country.objects.all()
-        tourist_regions = TouristRegion.objects.all()
-        locations = Location.objects.all()
-        # main_locations = MainLocation.objects.all()
-
-        collection_serializer = CollectionSerializer(collections, many=True)
-        # activity_serializer = ActivitySerializer(activities, many=True)
-        country_serializer = CountrySerializer(countries, many=True)
-        tourist_region_serializer = TouristRegionSerializer(tourist_regions, many=True)
-        location_serializer = LocationSerializer(locations, many=True)
-        # main_location_serializer = MainLocationSerializer(main_locations, many=True)
-
-        all_tags_data = {
-            'collections': collection_serializer.data,
-            # 'activities': activity_serializer.data,
-            'countries': country_serializer.data,
-            'tourist_regions': tourist_region_serializer.data,
-            'locations': location_serializer.data,
-            # 'main_locations': main_location_serializer.data,
-        }
-
-        return Response(all_tags_data)
+# class MainLocationCreate(APIView):
+#     def post(self, request, format=None):
+#         serializer = MainLocationSerializer(data=request.data)
+#
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# class MainLocationList(generics.ListAPIView):
+#     queryset = MainLocation.objects.all()
+#     serializer_class = MainLocationSerializer
+#
+#
+# class MainLocationDetail(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = MainLocation.objects.all()
+#     serializer_class = MainLocationSerializer
+#     lookup_field = 'slug'
