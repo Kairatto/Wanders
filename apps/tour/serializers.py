@@ -30,6 +30,15 @@ from apps.guide.serializers import GuideBunchSerializer
 from apps.days.serializers import DaysSerializer
 
 
+class SimilarTourSerializer(serializers.ModelSerializer):
+    country = CountryBunchSerializer(many=True, required=False)
+    concrete_tour = ConcreteTourSerializer(many=True, required=False)
+
+    class Meta:
+        model = Tour
+        fields = ['slug', 'main_activity', 'main_location', 'difficulty_level', 'country', 'concrete_tour']
+
+
 class TourSerializer(serializers.ModelSerializer):
     collection_point = CollectionPointSerializer(many=True, required=False)
     recommendations = RecommendationsSerializer(many=True, required=False)
@@ -200,3 +209,5 @@ class TourSerializer(serializers.ModelSerializer):
                     PlaceResidenceImages.objects.create(place_residence=place_residence, **places_residence_images_data)
 
         return tour
+
+
