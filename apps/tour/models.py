@@ -26,14 +26,14 @@ class Tour(models.Model):
     insurance_conditions = models.ForeignKey(to=InsuranceConditions, on_delete=models.DO_NOTHING)
 
     language = models.ManyToManyField(to=Language, )
-    tour_currency = models.ManyToManyField(to=TourCurrency, )
+    tour_currency = models.ManyToManyField(to=TourCurrency)
 
-    country = models.ManyToManyField(to=Country, )
-    collection = models.ManyToManyField(to=Collection, )
-    location = models.ManyToManyField(to=Location, )
-    tourist_region = models.ManyToManyField(to=TouristRegion, )
+    country = models.ManyToManyField(to=Country)
+    collection = models.ManyToManyField(to=Collection)
+    location = models.ManyToManyField(to=Location)
+    tourist_region = models.ManyToManyField(to=TouristRegion)
 
-    guide = models.ManyToManyField(to=Guide, )
+    guide = models.ManyToManyField(to=Guide)
 
     create_date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     is_active = models.BooleanField(default=True, verbose_name='Активный')

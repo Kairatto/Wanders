@@ -1,9 +1,8 @@
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics
+from rest_framework import generics
 
 from apps.tour.filters import CommonTourListView
-from apps.tour.serializers import TourSerializer
+from apps.tour.serializers import TourSerializer, SimilarTourSerializer
 from apps.tour.models import Tour
 from apps.tour.utils import BaseCreateAPIView
 
@@ -55,6 +54,24 @@ class TourDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
     lookup_field = 'slug'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        similar_tours = self.get_similar_tours(instance)
+        data = serializer.data
+        data['similar_tours'] = similar_tours
+
+        return Response(data)
+
+    def get_similar_tours(self, instance):
+        similar_tours_queryset = Tour.objects.filter(main_location=instance.main_location).exclude(id=instance.id)[:5]
+
+        similar_tours_serializer = SimilarTourSerializer(similar_tours_queryset, many=True,
+                                                         context={'request': self.request})
+
+        return similar_tours_serializer.data
 
     def perform_destroy(self, instance):
         instance.is_active = False
