@@ -19,4 +19,6 @@ apps/tour_description/migrations/0001_initial.py
 apps/location_info/migrations/0001_initial.py
 apps/account/migrations/0001_initial.py
 apps/review/migrations/0001_initial.py
+apps/user/migrations/0001_initial.py
+apps/business/migrations/0001_initial.py
 post.json

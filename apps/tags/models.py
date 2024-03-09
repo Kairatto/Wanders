@@ -3,11 +3,11 @@ from slugify import slugify
 
 
 class InsuranceConditions(models.Model):
-    insurance_conditions = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.insurance_conditions
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -15,7 +15,7 @@ class InsuranceConditions(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.insurance_conditions}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while InsuranceConditions.objects.filter(slug=slug).exists():
@@ -30,11 +30,11 @@ class InsuranceConditions(models.Model):
 
 
 class ComfortLevel(models.Model):
-    comfort_level = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.comfort_level
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -42,7 +42,7 @@ class ComfortLevel(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.comfort_level}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while ComfortLevel.objects.filter(slug=slug).exists():
@@ -57,11 +57,11 @@ class ComfortLevel(models.Model):
 
 
 class TypeTour(models.Model):
-    type_tour = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.type_tour
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -69,7 +69,7 @@ class TypeTour(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.type_tour}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while TypeTour.objects.filter(slug=slug).exists():
@@ -84,11 +84,11 @@ class TypeTour(models.Model):
 
 
 class TourCurrency(models.Model):
-    tour_currency = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.tour_currency
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -96,7 +96,7 @@ class TourCurrency(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.tour_currency}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while TourCurrency.objects.filter(slug=slug).exists():
@@ -111,11 +111,11 @@ class TourCurrency(models.Model):
 
 
 class DifficultyLevel(models.Model):
-    difficulty_level = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.difficulty_level
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -123,7 +123,7 @@ class DifficultyLevel(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.difficulty_level}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while DifficultyLevel.objects.filter(slug=slug).exists():
@@ -138,11 +138,11 @@ class DifficultyLevel(models.Model):
 
 
 class Language(models.Model):
-    language = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.language
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -150,7 +150,7 @@ class Language(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.language}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while Language.objects.filter(slug=slug).exists():
@@ -165,11 +165,11 @@ class Language(models.Model):
 
 
 class Collection(models.Model):
-    collection = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.collection
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -177,7 +177,7 @@ class Collection(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.collection}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while Collection.objects.filter(slug=slug).exists():
@@ -192,11 +192,11 @@ class Collection(models.Model):
 
 
 class Country(models.Model):
-    country = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.country
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -204,7 +204,7 @@ class Country(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.country}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while Country.objects.filter(slug=slug).exists():
@@ -219,11 +219,11 @@ class Country(models.Model):
 
 
 class TouristRegion(models.Model):
-    region = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.region
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -231,7 +231,7 @@ class TouristRegion(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.region}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while TouristRegion.objects.filter(slug=slug).exists():
@@ -246,11 +246,11 @@ class TouristRegion(models.Model):
 
 
 class Location(models.Model):
-    location = models.CharField(max_length=10000)
+    title = models.CharField(max_length=10000)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
-        return self.location
+        return self.title
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -258,7 +258,7 @@ class Location(models.Model):
         super().save(*args, **kwargs)
 
         if not self.slug:
-            base_slug = slugify(f"{self.id}-{self.location}")
+            base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
             while Location.objects.filter(slug=slug).exists():
