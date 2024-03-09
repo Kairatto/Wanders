@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
 
+    'apps.user',
     'apps.tour',
     'apps.tags',
     'apps.days',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'apps.account',
     'apps.includes',
     'apps.question',
+    'apps.business',
     'apps.tour_images',
     'apps.accommodation',
     'apps.location_info',

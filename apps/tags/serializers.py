@@ -16,170 +16,170 @@ class TourCurrencySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TourCurrency
-        fields = ('slug', 'id', 'tour_currency', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_tour_currency(self, value):
-        return validate_unique(TourCurrency, 'tour_currency', value)
+        return validate_unique(TourCurrency, 'title', value)
 
 
 class TypeTourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TypeTour
-        fields = ('slug', 'id', 'type_tour', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_type_tour(self, value):
-        return validate_unique(TypeTour, 'type_tour', value)
+        return validate_unique(TypeTour, 'title', value)
 
 
 class ComfortLevelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ComfortLevel
-        fields = ('slug', 'id', 'comfort_level', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_comfort_level(self, value):
-        return validate_unique(ComfortLevel, 'comfort_level', value)
+        return validate_unique(ComfortLevel, 'title', value)
 
 
 class DifficultyLevelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DifficultyLevel
-        fields = ('slug', 'id', 'difficulty_level', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_difficulty_level(self, value):
-        return validate_unique(DifficultyLevel, 'difficulty_level', value)
+        return validate_unique(DifficultyLevel, 'title', value)
 
 
 class InsuranceConditionsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InsuranceConditions
-        fields = ('slug', 'id', 'insurance_conditions', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_insurance_conditions(self, value):
-        return validate_unique(InsuranceConditions, 'insurance_conditions', value)
+        return validate_unique(InsuranceConditions, 'title', value)
 
 
 class LanguageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Language
-        fields = ('slug', 'id', 'language', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_language(self, value):
-        return validate_unique(Language, 'language', value)
+        return validate_unique(Language, 'title', value)
 
 
 class CountrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = ('slug', 'id', 'country', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_country(self, value):
-        return validate_unique(Country, 'country', value)
+        return validate_unique(Country, 'title', value)
 
 
 class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ('slug', 'id', 'collection', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_collection(self, value):
-        return validate_unique(Collection, 'collection', value)
+        return validate_unique(Collection, 'title', value)
 
 
 class LocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ('slug', 'id', 'location', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_location(self, value):
-        return validate_unique(Location, 'location', value)
+        return validate_unique(Location, 'title', value)
 
 
 class TouristRegionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TouristRegion
-        fields = ('slug', 'id', 'region', )
+        fields = ('slug', 'id', 'title', )
 
     def validate_tourist_region(self, value):
-        return validate_unique(TouristRegion, 'region', value)
+        return validate_unique(TouristRegion, 'title', value)
 
 
 class TypeTourBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TypeTour
-        fields = ('type_tour', )
+        fields = ('title', )
 
 
 class ComfortLevelBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ComfortLevel
-        fields = ('comfort_level', )
+        fields = ('title', )
 
 
 class DifficultyLevelBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DifficultyLevel
-        fields = ('difficulty_level', )
+        fields = ('title', )
 
 
 class InsuranceConditionsBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InsuranceConditions
-        fields = ('insurance_conditions', )
+        fields = ('title', )
 
 
 class LanguageBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Language
-        fields = ('language', )
+        fields = ('title', )
 
 
 class TourCurrencyBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TourCurrency
-        fields = ('tour_currency', )
+        fields = ('title', )
 
 
 class CountryBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Country
-        fields = ('country', )
+        fields = ('title', )
 
 
 class CollectionBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ('collection', )
+        fields = ('title', )
 
 
 class LocationBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Location
-        fields = ('location', )
+        fields = ('title', )
 
 
 class TouristRegionBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TouristRegion
-        fields = ('region', )
+        fields = ('title', )
 
 
 # class ActivityBunchSerializer(serializers.ModelSerializer):

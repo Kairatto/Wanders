@@ -23,12 +23,18 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+
     path('tour/', include('apps.tour.urls')),
-    path('location/', include('apps.location_info.urls')),
-    path('account/', include('apps.account.urls')),
     path('tags/', include('apps.tags.urls')),
     path('guide/', include('apps.guide.urls')),
     path('review/', include('apps.review.urls')),
+    path('location/', include('apps.location_info.urls')),
+
+    path('user/', include('apps.user.urls')),
+    path('account/', include('apps.account.urls')),
+    path('business/', include('apps.business.urls')),
+
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
