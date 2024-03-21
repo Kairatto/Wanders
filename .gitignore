@@ -1,7 +1,9 @@
 venv/
 media/
 .idea/
+.env
 db.sqlite3
+dump.rdb
 **/__pycache__/
 apps/tour/migrations/0001_initial.py
 apps/days/migrations/0001_initial.py
@@ -21,4 +23,5 @@ apps/account/migrations/0001_initial.py
 apps/review/migrations/0001_initial.py
 apps/user/migrations/0001_initial.py
 apps/business/migrations/0001_initial.py
+apps/favorites/migrations/0001_initial.py
 post.json

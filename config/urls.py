@@ -30,6 +30,7 @@ urlpatterns = [
     path('tags/', include('apps.tags.urls')),
     path('guide/', include('apps.guide.urls')),
     path('review/', include('apps.review.urls')),
+    path('favorites/', include('apps.favorites.urls')),
     path('location/', include('apps.location_info.urls')),
 
     path('user/', include('apps.user.urls')),

@@ -1,20 +1,22 @@
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, generics, filters
+from rest_framework import status, generics
 
 from apps.review.models import Review
 from apps.review.serializers import ReviewSerializer
+from apps.tour.permissions import IsOwner, IsNotBusinessUser
 
 
 class ReviewCreate(APIView):
-    def post(self, request, format=None):
+    permission_classes = [IsAuthenticated, IsNotBusinessUser]
+
+    def post(self, request):
         serializer = ReviewSerializer(data=request.data)
-
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
 class ReviewList(APIView):
@@ -25,6 +27,6 @@ class ReviewList(APIView):
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsOwner, IsNotBusinessUser]
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    lookup_field = 'id'

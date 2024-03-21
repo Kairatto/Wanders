@@ -1,14 +1,25 @@
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework.views import APIView
 
 from apps.tour.filters import CommonTourListView
+from apps.tour.permissions import IsAuthorOrAllowAny, IsBusinessUser, IsOwner
 from apps.tour.serializers import TourSerializer, SimilarTourSerializer
 from apps.tour.models import Tour
 from apps.tour.utils import BaseCreateAPIView
 
 
-class TourCreate(BaseCreateAPIView):
-    serializer_class = TourSerializer
+class TourCreate(APIView):
+    permission_classes = [IsAuthenticated, IsBusinessUser, IsOwner]
+
+    def post(self, request):
+        serializer = TourSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(author=request.user)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
 class TourListDev(CommonTourListView):
@@ -51,6 +62,7 @@ class TourListView(CommonTourListView):
 
 
 class TourDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsOwner, IsBusinessUser]
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
     lookup_field = 'slug'
@@ -66,7 +78,7 @@ class TourDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(data)
 
     def get_similar_tours(self, instance):
-        similar_tours_queryset = Tour.objects.filter(main_location=instance.main_location).exclude(id=instance.id)[:5]
+        similar_tours_queryset = Tour.objects.filter(main_location=instance.main_location).exclude(id=instance.id)[:4]
 
         similar_tours_serializer = SimilarTourSerializer(similar_tours_queryset, many=True,
                                                          context={'request': self.request})

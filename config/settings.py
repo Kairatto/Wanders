@@ -19,6 +19,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+
+# CORS_ALLOW_ALL_ORIGINS = False
+
+# CORS_ALLOWED_ORIGINS = ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002',]
+
+# CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS',]
+
+
 INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.admin',
@@ -45,6 +53,7 @@ INSTALLED_APPS = [
     'apps.includes',
     'apps.question',
     'apps.business',
+    'apps.favorites',
     'apps.tour_images',
     'apps.accommodation',
     'apps.location_info',
@@ -149,8 +158,8 @@ AUTH_USER_MODEL = 'account.User'
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=360),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
@@ -167,7 +176,7 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken', 'rest_framework_simplejwt.tokens.SlidingToken'),
     'TOKEN_TYPE_CLAIM': 'token_type',
     'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
 
@@ -198,11 +207,10 @@ REST_FRAMEWORK = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'kairattoss@gmail.com'
-EMAIL_HOST_PASSWORD = 'fegnkqgavvpmndbz'
-EMAIL_USE_TLS = True
-
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_PORT = config('EMAIL_PORT', default=587)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

@@ -1,11 +1,18 @@
+from datetime import datetime
+
+from django.http import Http404
+from rest_framework import status
+from django.contrib.auth import logout
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import IsAuthenticated
-from django.http import Http404
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken
+from rest_framework_simplejwt.tokens import RefreshToken
 
+from config import settings
 from .serializers import (
     RegistrationSerializer,
     ChangePasswordSerializer,
@@ -101,3 +108,16 @@ class DeleteAccountView(APIView):
             'Ваш аккаунт удален.',
             status=status.HTTP_204_NO_CONTENT
         )
+
+
+class LogoutView(APIView):
+    authentication_classes = (JWTAuthentication,)
+
+    def post(self, request):
+        try:
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

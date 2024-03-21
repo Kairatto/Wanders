@@ -16,7 +16,7 @@ from .views import (
 
 
 urlpatterns = [ 
-    path('', TourAgentCreateView.as_view(), name='creation'),
+    path('create/', TourAgentCreateView.as_view(), name='creation'),
     path('list/', TourAgentListView.as_view(), name='list'),
     path('<str:slug>/', TourAgentRetrieveView.as_view(), name='get_tour_gent'),
     path('delete/<str:slug>/', TourAgentDeleteView.as_view(), name='delete_tour_agent'),

@@ -2,7 +2,9 @@ from rest_framework import serializers
 
 from apps.location_info.models import LocationInfo, LocationInfoImage, GettingThere
 from apps.tags.models import Collection, Country, Location, TouristRegion
+from apps.tour.models import Tour
 
+from apps.concrete_tour.serializers import ConcreteTourSerializer
 from apps.tags.serializers import (CollectionBunchSerializer, CountryBunchSerializer, LocationBunchSerializer,
                                    TouristRegionBunchSerializer)
 
@@ -17,6 +19,17 @@ class GettingThereSerializer(serializers.ModelSerializer):
     class Meta:
         model = GettingThere
         fields = ('title', 'travel_time', 'price_travel', 'description',)
+
+
+class TourForLocationSerializer(serializers.ModelSerializer):
+    country = CountryBunchSerializer(many=True, required=False)
+    concrete_tour = ConcreteTourSerializer(many=True, required=False)
+    location_info = LocationBunchSerializer(many=True, required=False)
+
+    class Meta:
+        model = Tour
+        fields = ['slug', 'location_info', 'main_activity', 'main_location',
+                  'difficulty_level', 'country', 'amount_of_days', 'concrete_tour']
 
 
 class LocationInfoSerializer(serializers.ModelSerializer):

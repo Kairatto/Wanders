@@ -31,6 +31,7 @@ class InsuranceConditions(models.Model):
 
 class ComfortLevel(models.Model):
     title = models.CharField(max_length=10000)
+    description = models.TextField(max_length=3000, blank=True)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
@@ -112,6 +113,7 @@ class TourCurrency(models.Model):
 
 class DifficultyLevel(models.Model):
     title = models.CharField(max_length=10000)
+    description = models.TextField(max_length=6000, blank=True)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
