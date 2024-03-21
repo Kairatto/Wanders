@@ -3,10 +3,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
+from apps.tour.models import Tour
 from apps.tour.utils import BaseCreateAPIView
 
-from .models import LocationInfo
-from .serializers import LocationInfoSerializer
+from apps.location_info.models import LocationInfo
+from apps.location_info.serializers import LocationInfoSerializer, TourForLocationSerializer
 
 
 class LocationInfoCreate(BaseCreateAPIView):
@@ -37,7 +38,7 @@ class LocationInfoList(generics.ListAPIView):
                 'slug': item['slug'],
                 'title': item['title'],
                 'location_info_images': item['location_info_images'],
-                'location': [{'location': loc['location']} for loc in item['location']],
+                'location': [{'location': loc['title']} for loc in item['location']],
             }
 
             filtered_data.append(filtered_item)
@@ -49,3 +50,15 @@ class LocationInfoDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = LocationInfo.objects.all()
     serializer_class = LocationInfoSerializer
     lookup_field = 'slug'
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        location_titles = instance.location.all().values_list('title', flat=True)
+        tours_to_location = Tour.objects.filter(location__title__in=location_titles).distinct()[:3]
+
+        tours_to_location_serializer = TourForLocationSerializer(tours_to_location, many=True, context={'request': request})
+        response_data = serializer.data
+        response_data['tours_to_location'] = tours_to_location_serializer.data
+
+        return Response(response_data)

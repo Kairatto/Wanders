@@ -42,7 +42,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return user 
 
 
-class UserListSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username']
@@ -88,8 +88,8 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 class RestorePasswordSerializer(serializers.Serializer):
     def send_code(self):
-        user = self.context.get('request').user
-        user = User.objects.get(username=user)
+        username = self.context.get('request').data.get('username')
+        user = User.objects.get(username=username)
         user.create_activation_code()
         print(user.email, user.activation_code)
         send_change_password_code.delay(user.email, user.activation_code)
@@ -117,8 +117,8 @@ class SetRestoredPasswordSerializer(serializers.Serializer):
         return attrs
 
     def set_new_password(self):
-        user = self.context.get('request').user
-        user = User.objects.get(username=user)
+        code = self.validated_data.get('code')
+        user = User.objects.get(activation_code=code)
         new_password = self.validated_data.get('new_password')
         user.set_password(new_password)
         user.activation_code = ''

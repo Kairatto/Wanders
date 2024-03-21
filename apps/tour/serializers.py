@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.account.serializers import UserSerializer
 from apps.tour.models import Tour
 from apps.guide.models import Guide
 from apps.question.models import Question
@@ -36,7 +37,7 @@ class SimilarTourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ['slug', 'main_activity', 'main_location', 'difficulty_level', 'country', 'concrete_tour']
+        fields = ['slug', 'main_activity', 'main_location', 'difficulty_level', 'country', 'amount_of_days', 'concrete_tour']
 
 
 class TourSerializer(serializers.ModelSerializer):
@@ -60,6 +61,8 @@ class TourSerializer(serializers.ModelSerializer):
     language = LanguageBunchSerializer(many=True, required=False)
     tour_currency = TourCurrencyBunchSerializer(many=True, required=False)
 
+    author = UserSerializer(read_only=True)
+
     # insurance_conditions = InsuranceConditionsBunchSerializer(many=True, required=False)
     # difficulty_level = DifficultyLevelBunchSerializer(many=True, required=False)
     # comfort_level = ComfortLevelBunchSerializer(many=True, required=False)
@@ -72,7 +75,7 @@ class TourSerializer(serializers.ModelSerializer):
                   'insurance_conditions', 'tour_images', 'concrete_tour', 'collection_point',
                   'recommendations', 'list_of_things', 'included', 'not_included', 'days', 'place',
                   'guide', 'question', 'country', 'collection', 'main_activity', 'location', 'main_location',
-                  'tourist_region', 'is_active', 'create_date')
+                  'tourist_region', 'author', 'is_active', 'create_date')
 
     def create(self, validated_data):
         collection_point_data = validated_data.pop('collection_point', [])

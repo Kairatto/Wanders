@@ -10,6 +10,10 @@ from .models import (
 )
 
 
+from rest_framework import serializers
+from django.contrib.auth import get_user_model
+from .models import TourAgent
+
 User = get_user_model()
 
 
@@ -23,14 +27,12 @@ class TourAgentCreateSerializer(serializers.ModelSerializer):
         model = TourAgent
         fields = '__all__'
 
-    # def validate_phone(self, phone):
-    #     phone = normalize_phone(phone)
-    #     if len(phone) != 13:
-    #         raise serializers.ValidationError('Invalid phone format!')
-    #     return phone  
-
     def create(self, validated_data):
         profile = TourAgent.objects.create(**validated_data)
+        # Устанавливаем is_business пользователя на True после создания профиля
+        user = profile.user
+        user.is_business = True
+        user.save()
         return profile
      
 

@@ -10,6 +10,8 @@ django-filter
 marshmallow
 
 djangorestframework-simplejwt
+
+redis-server
 celery
 redis
 

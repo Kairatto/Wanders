@@ -1,11 +1,16 @@
 from django.db import models
 from slugify import slugify
 
+from django.contrib.auth import get_user_model
 from apps.guide.models import Guide
 from apps.tags.models import (Country, Collection, Location, TouristRegion, Language, InsuranceConditions,
                               DifficultyLevel, ComfortLevel, TypeTour, TourCurrency)
 
 
+User = get_user_model()
+
+
+### Удалить collection_pointб recommendations
 class Tour(models.Model):
 
     title = models.CharField(max_length=10000, verbose_name='Название тура')
@@ -34,6 +39,8 @@ class Tour(models.Model):
     tourist_region = models.ManyToManyField(to=TouristRegion)
 
     guide = models.ManyToManyField(to=Guide)
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     create_date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
     is_active = models.BooleanField(default=True, verbose_name='Активный')

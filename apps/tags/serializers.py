@@ -36,7 +36,7 @@ class ComfortLevelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ComfortLevel
-        fields = ('slug', 'id', 'title', )
+        fields = ('slug', 'id', 'title', 'description')
 
     def validate_comfort_level(self, value):
         return validate_unique(ComfortLevel, 'title', value)
@@ -46,7 +46,7 @@ class DifficultyLevelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DifficultyLevel
-        fields = ('slug', 'id', 'title', )
+        fields = ('slug', 'id', 'title', 'description')
 
     def validate_difficulty_level(self, value):
         return validate_unique(DifficultyLevel, 'title', value)
@@ -123,14 +123,14 @@ class ComfortLevelBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ComfortLevel
-        fields = ('title', )
+        fields = ('title', 'description')
 
 
 class DifficultyLevelBunchSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DifficultyLevel
-        fields = ('title', )
+        fields = ('title', 'description')
 
 
 class InsuranceConditionsBunchSerializer(serializers.ModelSerializer):
