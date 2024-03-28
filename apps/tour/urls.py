@@ -7,5 +7,5 @@ urlpatterns = [
     path('create/', TourCreate.as_view(), name='tour-create'),
     path('dev/', TourListDev.as_view(), name='tour-list-dev'),
     path('list/', TourListView.as_view(), name='tour-list'),
-    path('<str:slug>/', TourDetail.as_view(), name='tour-detail'),
+    path('detail/<str:slug>/', TourDetail.as_view(), name='tour-detail'),
 ]

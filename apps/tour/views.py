@@ -1,18 +1,18 @@
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.views import APIView
 
 from apps.tour.filters import CommonTourListView
-from apps.tour.permissions import IsAuthorOrAllowAny, IsBusinessUser, IsOwner
+from apps.account.permissions import IsBusinessUser, IsOwnerAuthor
 from apps.tour.serializers import TourSerializer, SimilarTourSerializer
 from apps.tour.models import Tour
 from apps.tour.utils import BaseCreateAPIView
 
 
 class TourCreate(APIView):
-    permission_classes = [IsAuthenticated, IsBusinessUser, IsOwner]
+    permission_classes = [IsBusinessUser, IsOwnerAuthor]
 
     def post(self, request):
         serializer = TourSerializer(data=request.data)
@@ -53,7 +53,7 @@ class TourListView(CommonTourListView):
                 'collection': item['collection'],
                 'location': item['location'],
                 'tourist_region': item['tourist_region'],
-                'concrete_tour': item['concrete_tour'],
+                'concrete_tour_date': item['concrete_tour_date'],
             }
 
             filtered_data.append(filtered_item)
@@ -62,10 +62,15 @@ class TourListView(CommonTourListView):
 
 
 class TourDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsOwner, IsBusinessUser]
+    permission_classes = [IsOwnerAuthor, IsBusinessUser]
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
     lookup_field = 'slug'
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsOwnerAuthor(), IsBusinessUser()]
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

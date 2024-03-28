@@ -7,5 +7,5 @@ urlpatterns = [
     path('create/', LocationInfoCreate.as_view(), name='location-create'),
     path('list/', LocationInfoList.as_view(), name='location-list'),
     path('dev/', LocationInfoDevList.as_view(), name='location-list-dev'),
-    path('<str:slug>/', LocationInfoDetail.as_view(), name='location-detail'),
+    path('detail/<str:slug>/', LocationInfoDetail.as_view(), name='location-detail'),
 ]

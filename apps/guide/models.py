@@ -3,10 +3,10 @@ from slugify import slugify
 
 
 class Guide(models.Model):
-    first_name = models.CharField(max_length=10000, verbose_name='Имя гида')
-    last_name = models.CharField(max_length=10000, verbose_name='Фамилия гида')
-    description = models.TextField(blank=True, verbose_name='Описание гида')
-    photo = models.ImageField(upload_to='avatar_guide', blank=True)
+    first_name = models.CharField(max_length=10000, verbose_name='Имя гида', blank=True, null=True)
+    last_name = models.CharField(max_length=10000, verbose_name='Фамилия гида', blank=True, null=True)
+    description = models.TextField(verbose_name='Описание гида', blank=True, null=True)
+    photo = models.ImageField(upload_to='avatar_guide', blank=True, null=True)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:

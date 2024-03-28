@@ -4,7 +4,7 @@ from apps.tour.models import Tour
 
 
 class Included(models.Model):
-    included = models.CharField(max_length=10000, verbose_name='Включено в стоимость тура')
+    included = models.CharField(max_length=10000, verbose_name='Включено в стоимость тура', blank=True, null=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,
@@ -20,7 +20,7 @@ class Included(models.Model):
 
 
 class NotIncluded(models.Model):
-    not_included = models.CharField(max_length=10000, verbose_name='Не включено в стоимость тура')
+    not_included = models.CharField(max_length=10000, verbose_name='Не включено в стоимость тура', blank=True, null=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,

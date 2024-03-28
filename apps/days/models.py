@@ -4,8 +4,8 @@ from apps.tour.models import Tour
 
 
 class Days(models.Model):
-    title = models.CharField(max_length=3000, verbose_name='Название дня')
-    description = models.TextField(max_length=1000, blank=True,  verbose_name='Описание дня')
+    title = models.CharField(max_length=3000, verbose_name='Название дня', blank=True, null=True)
+    description = models.TextField(max_length=1000, verbose_name='Описание дня', blank=True, null=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,
@@ -21,7 +21,7 @@ class Days(models.Model):
 
 
 class DaysImage(models.Model):
-    image = models.ImageField(upload_to='days_images')
+    image = models.ImageField(upload_to='days_images', blank=True, null=True)
     day = models.ForeignKey(
         to=Days,
         on_delete=models.CASCADE,

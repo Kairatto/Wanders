@@ -10,9 +10,9 @@ User = get_user_model()
 class ProfileCreateSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(
         default=serializers.CurrentUserDefault(),
-        source='user.username'
+        source='user.email'
     )
-    carousel_img = serializers.ListField(
+    user_image = serializers.ListField(
         child=serializers.FileField(),
         write_only=True
     )
@@ -22,11 +22,18 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        carousel_images = validated_data.pop('carousel_img')
+        user = validated_data['user']
+        if Profile.objects.filter(user=user).exists():
+            raise serializers.ValidationError("У вас уже есть созданный аккаунт")
+
+        validated_data['user'].is_user = True
+        validated_data['user'].save()
+
+        user_images = validated_data.pop('user_image')
         profile = Profile.objects.create(**validated_data)
         images = []
 
-        for image in carousel_images:
+        for image in user_images:
             images.append(ProfileImage(user=profile, image=image))
 
         ProfileImage.objects.bulk_create(images)
@@ -37,11 +44,6 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
         attrs['user'] = user
         return attrs
 
-    # def validate(self, attrs):
-    #     user = self.context['request'].user
-    #     attrs['user'] = user
-    #     return attrs
-    
     def validate_phone(self, phone):
         phone = normalize_phone(phone)
         if len(phone) != 13:
@@ -50,21 +52,22 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
 
 
 class ProfileListSerializer(serializers.ModelSerializer):
+    user = serializers.ReadOnlyField(source='user.email')
+
     class Meta:
         model = Profile
-        fields = ['user', 'first_name', 'last_name']
+        fields = ['user', 'first_name', 'last_name', 'phone', 'country', 'city']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(
         default=serializers.CurrentUserDefault(),
-        source='user.username'
+        source='user.email'
     )
 
     class Meta:
-        fields = '__all__'
         model = Profile
-
+        fields = '__all__'
 
     def validate(self, attrs):
         user = self.context.get('request').user

@@ -3,9 +3,9 @@ from django.contrib import admin
 
 from .models import (
     TourAgent, 
-    TourAgentImage
+    # TourAgentImage
     )
 
 
 admin.site.register(TourAgent)
-admin.site.register(TourAgentImage)
+# admin.site.register(TourAgentImage)

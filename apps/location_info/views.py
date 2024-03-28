@@ -1,8 +1,10 @@
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
+from apps.account.permissions import IsStaff
 from apps.tour.models import Tour
 from apps.tour.utils import BaseCreateAPIView
 
@@ -11,6 +13,7 @@ from apps.location_info.serializers import LocationInfoSerializer, TourForLocati
 
 
 class LocationInfoCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = LocationInfoSerializer
 
 
@@ -47,9 +50,15 @@ class LocationInfoList(generics.ListAPIView):
 
 
 class LocationInfoDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = LocationInfo.objects.all()
     serializer_class = LocationInfoSerializer
     lookup_field = 'slug'
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsStaff()]
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

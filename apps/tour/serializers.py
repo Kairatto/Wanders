@@ -1,29 +1,22 @@
 from rest_framework import serializers
 
-from apps.account.serializers import UserSerializer
 from apps.tour.models import Tour
 from apps.guide.models import Guide
 from apps.question.models import Question
 from apps.days.models import Days, DaysImage
 from apps.tour_images.models import TourImages
 from apps.list_of_things.models import ListOfThings
+from apps.account.serializers import UserSerializer
 from apps.includes.models import Included, NotIncluded
-from apps.recommendations.models import Recommendations
-from apps.collection_point.models import CollectionPoint
-from apps.concrete_tour.models import ConcreteTour, ConcreteTourDate
+from apps.concrete_tour.models import ConcreteTourDate
 from apps.accommodation.models import (PlaceResidence, PlaceResidenceImages, Place)
-from apps.tags.models import (Collection, Country, Location, TouristRegion, Language,
-                              InsuranceConditions, DifficultyLevel, ComfortLevel, TypeTour, TourCurrency)
+from apps.tags.models import (Collection, Country, Location, TouristRegion, Language, TourCurrency)
 
 from apps.tags.serializers import (CollectionBunchSerializer, CountryBunchSerializer, LocationBunchSerializer,
-                                   TouristRegionBunchSerializer, LanguageBunchSerializer,
-                                   InsuranceConditionsBunchSerializer, DifficultyLevelBunchSerializer,
-                                   ComfortLevelBunchSerializer, TypeTourBunchSerializer, TourCurrencyBunchSerializer)
+                                   TouristRegionBunchSerializer, LanguageBunchSerializer, TourCurrencyBunchSerializer)
 from apps.includes.serializers import NotIncludedSerializer, IncludedSerializer
-from apps.collection_point.serializers import CollectionPointSerializer
-from apps.recommendations.serializers import RecommendationsSerializer
+from apps.concrete_tour.serializers import ConcreteTourDateSerializer
 from apps.list_of_things.serializers import ListOfThingsSerializer
-from apps.concrete_tour.serializers import ConcreteTourSerializer
 from apps.tour_images.serializers import TourImagesSerializer
 from apps.accommodation.serializers import PlaceSerializer
 from apps.question.serializers import QuestionSerializer
@@ -33,18 +26,17 @@ from apps.days.serializers import DaysSerializer
 
 class SimilarTourSerializer(serializers.ModelSerializer):
     country = CountryBunchSerializer(many=True, required=False)
-    concrete_tour = ConcreteTourSerializer(many=True, required=False)
+    concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
 
     class Meta:
         model = Tour
-        fields = ['slug', 'main_activity', 'main_location', 'difficulty_level', 'country', 'amount_of_days', 'concrete_tour']
+        fields = ['slug', 'title', 'main_activity', 'main_location', 'difficulty_level',
+                  'country', 'amount_of_days', 'concrete_tour_date']
 
 
 class TourSerializer(serializers.ModelSerializer):
-    collection_point = CollectionPointSerializer(many=True, required=False)
-    recommendations = RecommendationsSerializer(many=True, required=False)
     list_of_things = ListOfThingsSerializer(many=True, required=False)
-    concrete_tour = ConcreteTourSerializer(many=True, required=False)
+    concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
     not_included = NotIncludedSerializer(many=True, required=False)
     tour_images = TourImagesSerializer(many=True, required=False)
     included = IncludedSerializer(many=True, required=False)
@@ -53,35 +45,28 @@ class TourSerializer(serializers.ModelSerializer):
     place = PlaceSerializer(many=True, required=False)
     days = DaysSerializer(many=True, required=False)
 
-    tourist_region = TouristRegionBunchSerializer(many=True, required=False)
-    collection = CollectionBunchSerializer(many=True, required=False)
-    location = LocationBunchSerializer(many=True, required=False)
     country = CountryBunchSerializer(many=True, required=False)
+    location = LocationBunchSerializer(many=True, required=False)
+    collection = CollectionBunchSerializer(many=True, required=False)
+    tourist_region = TouristRegionBunchSerializer(many=True, required=False)
 
-    language = LanguageBunchSerializer(many=True, required=False)
     tour_currency = TourCurrencyBunchSerializer(many=True, required=False)
+    language = LanguageBunchSerializer(many=True, required=False)
 
     author = UserSerializer(read_only=True)
 
-    # insurance_conditions = InsuranceConditionsBunchSerializer(many=True, required=False)
-    # difficulty_level = DifficultyLevelBunchSerializer(many=True, required=False)
-    # comfort_level = ComfortLevelBunchSerializer(many=True, required=False)
-    # type_tour = TypeTourBunchSerializer(many=True, required=False)
-
     class Meta:
         model = Tour
-        fields = ('slug', 'title', 'description', 'language', 'amount_of_days', 'min_people', 'max_people',
+        fields = ('slug', 'id', 'title', 'description', 'language', 'amount_of_days', 'min_people', 'max_people',
                   'min_age', 'max_age', 'difficulty_level', 'comfort_level', 'tour_currency', 'type_tour',
-                  'insurance_conditions', 'tour_images', 'concrete_tour', 'collection_point',
-                  'recommendations', 'list_of_things', 'included', 'not_included', 'days', 'place',
-                  'guide', 'question', 'country', 'collection', 'main_activity', 'location', 'main_location',
-                  'tourist_region', 'author', 'is_active', 'create_date')
+                  'insurance_conditions', 'tour_images', 'concrete_tour_date', 'list_of_things', 'included',
+                  'not_included', 'days', 'place', 'guide', 'question', 'country', 'collection',
+                  'main_activity', 'location', 'main_location', 'tourist_region', 'author',
+                  'is_active', 'is_draft', 'is_verified', 'is_archive', 'create_date')
 
     def create(self, validated_data):
-        collection_point_data = validated_data.pop('collection_point', [])
-        recommendations_data = validated_data.pop('recommendations', [])
+        concrete_tour_date_data = validated_data.pop('concrete_tour_date', [])
         list_of_things_data = validated_data.pop('list_of_things', [])
-        concrete_tour_data = validated_data.pop('concrete_tour', [])
         not_included_data = validated_data.pop('not_included', [])
         tour_images_data = validated_data.pop('tour_images', [])
         questions_data = validated_data.pop('question', [])
@@ -92,10 +77,6 @@ class TourSerializer(serializers.ModelSerializer):
 
         language_data = validated_data.pop('language', [])
         tour_currency_data = validated_data.pop('tour_currency', [])
-        # insurance_conditions_data = validated_data.pop('insurance_conditions', [])
-        # difficulty_level_data = validated_data.pop('difficulty_level', [])
-        # comfort_level_data = validated_data.pop('comfort_level', [])
-        # type_tour_data = validated_data.pop('type_tour', [])
 
         countries_data = validated_data.pop('country', [])
         locations_data = validated_data.pop('location', [])
@@ -106,10 +87,6 @@ class TourSerializer(serializers.ModelSerializer):
 
         tour.language.set([Language.objects.get_or_create(**data)[0] for data in language_data])
         tour.tour_currency.set([TourCurrency.objects.get_or_create(**data)[0] for data in tour_currency_data])
-        # tour.insurance_conditions.set([InsuranceConditions.objects.get_or_create(**data)[0] for data in insurance_conditions_data])
-        # tour.difficulty_level.set([DifficultyLevel.objects.get_or_create(**data)[0] for data in difficulty_level_data])
-        # tour.comfort_level.set([ComfortLevel.objects.get_or_create(**data)[0] for data in comfort_level_data])
-        # tour.type_tour.set([TypeTour.objects.get_or_create(**data)[0] for data in type_tour_data])
 
         tour.country.set([Country.objects.get_or_create(**data)[0] for data in countries_data])
         tour.location.set([Location.objects.get_or_create(**data)[0] for data in locations_data])
@@ -121,22 +98,6 @@ class TourSerializer(serializers.ModelSerializer):
         for languages_data in language_data:
             language, created = Language.objects.get_or_create(**languages_data)
             tour.language.add(language)
-
-        # for insurance_condition_data in insurance_conditions_data:
-        #     insurance_conditions, created = InsuranceConditions.objects.get_or_create(**insurance_condition_data)
-        #     tour.insurance_conditions.add(insurance_conditions)
-        #
-        # for difficulty_levels_data in difficulty_level_data:
-        #     difficulty_level, created = DifficultyLevel.objects.get_or_create(**difficulty_levels_data)
-        #     tour.difficulty_level.add(difficulty_level)
-        #
-        # for comfort_levels_data in comfort_level_data:
-        #     comfort_level, created = ComfortLevel.objects.get_or_create(**comfort_levels_data)
-        #     tour.comfort_level.add(comfort_level)
-        #
-        # for type_tours_data in type_tour_data:
-        #     type_tour, created = TypeTour.objects.get_or_create(**type_tours_data)
-        #     tour.type_tour.add(type_tour)
 
         for guides_data in guide_data:
             guide, created = Guide.objects.get_or_create(**guides_data)
@@ -174,17 +135,11 @@ class TourSerializer(serializers.ModelSerializer):
         for list_of_thing_data in list_of_things_data:
             ListOfThings.objects.create(tour=tour, **list_of_thing_data)
 
-        for recommendation_data in recommendations_data:
-            Recommendations.objects.create(tour=tour, **recommendation_data)
-
         for tour_image_data in tour_images_data:
             TourImages.objects.create(tour=tour, **tour_image_data)
 
-        for collection_points_data in collection_point_data:
-            tourist_region_data = collection_points_data.pop('tourist_region', [])
-            collection_point = CollectionPoint.objects.create(tour=tour, **collection_points_data)
-            collection_point.tourist_region.set(
-                [TouristRegion.objects.get_or_create(**data)[0] for data in tourist_region_data])
+        for concrete_tour_dates_data in concrete_tour_date_data:
+            ConcreteTourDate.objects.create(tour=tour, **concrete_tour_dates_data)
 
         for day_data in days_data:
             days_images_data = day_data.pop('days_images', [])
@@ -192,13 +147,6 @@ class TourSerializer(serializers.ModelSerializer):
 
             for image_data in days_images_data:
                 DaysImage.objects.create(day=days, **image_data)
-
-        for concrete_tours_data in concrete_tour_data:
-            concrete_tour_date_data = concrete_tours_data.pop('concrete_tour_date', [])
-            concrete_tour = ConcreteTour.objects.create(tour=tour, **concrete_tours_data)
-
-            for concrete_tours_date_data in concrete_tour_date_data:
-                ConcreteTourDate.objects.create(concrete_tour=concrete_tour, **concrete_tours_date_data)
 
         for places_data in place_data:
             place_residence_data = places_data.pop('place_residence', [])
@@ -213,4 +161,102 @@ class TourSerializer(serializers.ModelSerializer):
 
         return tour
 
+    def update(self, instance, validated_data):
 
+        fields_to_clear_if_missing = [
+            'title', 'description', 'amount_of_days', 'min_people', 'max_people',
+            'min_age', 'max_age', 'difficulty_level', 'comfort_level', 'type_tour',
+            'insurance_conditions', 'main_activity', 'main_location'
+        ]
+
+        simple_attrs = {attr: value for attr, value in validated_data.items() if attr not in [
+            'list_of_things', 'concrete_tour_date', 'not_included', 'tour_images', 'included', 'question', 'guide',
+            'place', 'days', 'language', 'tour_currency', 'country', 'collection', 'location', 'tourist_region'
+        ]}
+
+        for attr, value in simple_attrs.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        m2m_fields_to_clear = [
+            'language', 'tour_currency', 'country', 'collection',
+            'location', 'tourist_region', 'guide'
+        ]
+
+        m2m_fields = {
+            'guide': (Guide, validated_data.pop('guide', [])),
+            'country': (Country, validated_data.pop('country', [])),
+            'language': (Language, validated_data.pop('language', [])),
+            'location': (Location, validated_data.pop('location', [])),
+            'collection': (Collection, validated_data.pop('collection', [])),
+            'tour_currency': (TourCurrency, validated_data.pop('tour_currency', [])),
+            'tourist_region': (TouristRegion, validated_data.pop('tourist_region', [])),
+        }
+
+        for field in fields_to_clear_if_missing:
+            if field not in validated_data:
+                setattr(instance, field, None)
+
+        for field in m2m_fields_to_clear:
+            if field not in validated_data:
+                getattr(instance, field).clear()
+
+        instance.save()
+
+        if 'list_of_things' in validated_data:
+            lists_of_things_data = validated_data.pop('list_of_things')
+            instance.list_of_things.all().delete()
+            for lists_of_things_data_data in lists_of_things_data:
+                ListOfThings.objects.create(**lists_of_things_data_data, tour=instance)
+
+        if 'not_included' in validated_data:
+            not_includes_data = validated_data.pop('not_included')
+            instance.not_included.all().delete()
+            for not_included_data_data in not_includes_data:
+                NotIncluded.objects.create(**not_included_data_data, tour=instance)
+
+        if 'included' in validated_data:
+            includes_data = validated_data.pop('included')
+            instance.included.all().delete()
+            for included_data_data in includes_data:
+                Included.objects.create(**included_data_data, tour=instance)
+
+        if 'question' in validated_data:
+            questions_data = validated_data.pop('question')
+            instance.question.all().delete()
+            for question_data in questions_data:
+                Question.objects.create(**question_data, tour=instance)
+
+        if 'days' in validated_data:
+            days_data = validated_data.pop('days')
+            instance.days.all().delete()
+
+            for day_item in days_data:
+                days_images_data = day_item.pop('days_images', [])
+                day_instance = Days.objects.create(tour=instance, **day_item)
+
+                for image_data in days_images_data:
+                    DaysImage.objects.create(day=day_instance, **image_data)
+
+        if 'place' in validated_data:
+            place_data_list = validated_data.pop('place')
+
+            instance.place.all().delete()
+
+            for place_data in place_data_list:
+                place_residence_data = place_data.pop('place_residence', [])
+                place_instance = Place.objects.create(tour=instance, **place_data)
+
+                for pr_data in place_residence_data:
+                    place_residence_images_data = pr_data.pop('place_residence_images', [])
+                    place_residence_instance = PlaceResidence.objects.create(place=place_instance, **pr_data)
+
+                    for image_data in place_residence_images_data:
+                        PlaceResidenceImages.objects.create(place_residence=place_residence_instance, **image_data)
+
+        for field, (Model, data) in m2m_fields.items():
+            if data:
+                objs = [Model.objects.get_or_create(**item)[0] for item in data]
+                getattr(instance, field).set(objs)
+
+        return instance

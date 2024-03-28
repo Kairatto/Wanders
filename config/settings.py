@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.review',
     'apps.account',
     'apps.includes',
+    'apps.about_us',
     'apps.question',
     'apps.business',
     'apps.favorites',
@@ -59,8 +60,6 @@ INSTALLED_APPS = [
     'apps.location_info',
     'apps.concrete_tour',
     'apps.list_of_things',
-    'apps.recommendations',
-    'apps.collection_point',
 
 ]
 
@@ -172,7 +171,7 @@ SIMPLE_JWT = {
 
     'AUTH_HEADER_TYPES': ('Bearer',),
     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
-    'USER_ID_FIELD': 'username',
+    'USER_ID_FIELD': 'email',
     'USER_ID_CLAIM': 'user_id',
     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
 
