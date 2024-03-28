@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
+from apps.account.permissions import IsStaff
 from apps.tour.utils import BaseCreateAPIView
 
 from apps.tags.models import (Country, Collection, Location, TouristRegion, Language,
@@ -17,6 +18,7 @@ from apps.tags.serializers import (CollectionSerializer, LocationSerializer, Tou
 
 
 class TourCurrencyCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = TourCurrencySerializer
 
 
@@ -26,12 +28,14 @@ class TourCurrencyList(generics.ListAPIView):
 
 
 class TourCurrencyDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = TourCurrency.objects.all()
     serializer_class = TourCurrencyBunchSerializer
     lookup_field = 'slug'
 
 
 class TypeTourCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = TypeTourSerializer
 
 
@@ -41,12 +45,14 @@ class TypeTourList(generics.ListAPIView):
 
 
 class TypeTourDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = TypeTour.objects.all()
     serializer_class = TypeTourBunchSerializer
     lookup_field = 'slug'
 
 
 class ComfortLevelCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = ComfortLevelSerializer
 
 
@@ -56,12 +62,14 @@ class ComfortLevelList(generics.ListAPIView):
 
 
 class ComfortLevelDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = ComfortLevel.objects.all()
     serializer_class = ComfortLevelBunchSerializer
     lookup_field = 'slug'
 
 
 class DifficultyLevelCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = DifficultyLevelSerializer
 
 
@@ -71,12 +79,14 @@ class DifficultyLevelList(generics.ListAPIView):
 
 
 class DifficultyLevelDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = DifficultyLevel.objects.all()
     serializer_class = DifficultyLevelBunchSerializer
     lookup_field = 'slug'
 
 
 class InsuranceConditionsCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = InsuranceConditionsSerializer
 
 
@@ -86,12 +96,14 @@ class InsuranceConditionsList(generics.ListAPIView):
 
 
 class InsuranceConditionsDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = InsuranceConditions.objects.all()
     serializer_class = InsuranceConditionsBunchSerializer
     lookup_field = 'slug'
 
 
 class LanguageCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = LanguageSerializer
 
 
@@ -101,12 +113,14 @@ class LanguageList(generics.ListAPIView):
 
 
 class LanguageDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = Language.objects.all()
     serializer_class = LanguageBunchSerializer
     lookup_field = 'slug'
 
 
 class CollectionCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = CollectionSerializer
 
 
@@ -116,12 +130,14 @@ class CollectionList(generics.ListAPIView):
 
 
 class CollectionDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = Collection.objects.all()
     serializer_class = CollectionBunchSerializer
     lookup_field = 'slug'
 
 
 class CountryCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = CountrySerializer
 
 
@@ -131,12 +147,14 @@ class CountryList(generics.ListAPIView):
 
 
 class CountryDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = Country.objects.all()
     serializer_class = CountryBunchSerializer
     lookup_field = 'slug'
 
 
 class LocationCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = LocationSerializer
 
 
@@ -146,12 +164,14 @@ class LocationList(generics.ListAPIView):
 
 
 class LocationDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = Location.objects.all()
     serializer_class = LocationBunchSerializer
     lookup_field = 'slug'
 
 
 class TouristRegionCreate(BaseCreateAPIView):
+    permission_classes = IsStaff
     serializer_class = TouristRegionSerializer
 
 
@@ -161,6 +181,7 @@ class TouristRegionList(generics.ListAPIView):
 
 
 class TouristRegionDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = IsStaff
     queryset = TouristRegion.objects.all()
     serializer_class = TouristRegionBunchSerializer
     lookup_field = 'slug'
@@ -211,48 +232,3 @@ class AllTagsView(APIView):
         }
 
         return Response(all_tags_data)
-
-
-#
-# class ActivityCreate(APIView):
-#     def post(self, request, format=None):
-#         serializer = ActivitySerializer(data=request.data)
-#
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class ActivityList(generics.ListAPIView):
-#     queryset = Activity.objects.all()
-#     serializer_class = ActivitySerializer
-#
-#
-# class ActivityDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Activity.objects.all()
-#     serializer_class = ActivitySerializer
-#     lookup_field = 'slug'
-
-
-# class MainLocationCreate(APIView):
-#     def post(self, request, format=None):
-#         serializer = MainLocationSerializer(data=request.data)
-#
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-#
-#
-# class MainLocationList(generics.ListAPIView):
-#     queryset = MainLocation.objects.all()
-#     serializer_class = MainLocationSerializer
-#
-#
-# class MainLocationDetail(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = MainLocation.objects.all()
-#     serializer_class = MainLocationSerializer
-#     lookup_field = 'slug'

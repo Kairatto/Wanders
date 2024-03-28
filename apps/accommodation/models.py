@@ -3,39 +3,13 @@ from django.db import models
 from apps.tour.models import Tour
 
 
-# class Accommodation(models.Model):
-#     description = models.TextField(max_length=999, verbose_name='Общее описание проживания')
-#     tour = models.ForeignKey(
-#         to=Tour,
-#         on_delete=models.CASCADE,
-#         related_name='accommodations',
-#     )
-#
-#     class Meta:
-#         verbose_name = 'Описание проживания'
-#
-#
-# class AccommodationImages(models.Model):
-#     image = models.ImageField(upload_to='accommodation_images')
-#     accommodation = models.ForeignKey(
-#         to=Accommodation,
-#         on_delete=models.CASCADE,
-#         related_name='accommodation_images',
-#     )
-#
-# ############ Убрать
-
-
 class Place(models.Model):
-    amount_days = models.PositiveSmallIntegerField(verbose_name='Количество дней')
+    amount_days = models.PositiveSmallIntegerField(verbose_name='Количество дней', blank=True, null=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,
         related_name='place',
     )
-
-    def __str__(self) -> str:
-        return self.title
 
     class Meta:
         verbose_name = 'Место проживания'
@@ -56,9 +30,9 @@ class PlaceResidence(models.Model):
         ('Villa', 'Вилла'),
     )
 
-    title = models.CharField(max_length=150, verbose_name='Название проживания')
-    description = models.TextField(max_length=1000, blank=True, verbose_name='Описание проживания')
-    type_accommodation = models.CharField(max_length=10000, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания')
+    title = models.CharField(max_length=150, verbose_name='Название проживания', blank=True, null=True)
+    description = models.TextField(max_length=1000, verbose_name='Описание проживания', blank=True, null=True)
+    type_accommodation = models.CharField(max_length=10000, choices=TYPE_ACCOMMODATION_CHOICES, verbose_name='Тип проживания', blank=True, null=True)
     place = models.ForeignKey(
         to=Place,
         on_delete=models.CASCADE,
@@ -74,7 +48,7 @@ class PlaceResidence(models.Model):
 
 
 class PlaceResidenceImages(models.Model):
-    image = models.ImageField(upload_to='place_images', blank=False)
+    image = models.ImageField(upload_to='place_images', blank=True, null=True)
     place_residence = models.ForeignKey(
         to=PlaceResidence,
         on_delete=models.CASCADE,

@@ -22,6 +22,6 @@ if __name__ == "__main__":
                          "apps/recommendations/migrations", "apps/tags/migrations", "apps/tour/migrations",
                          "apps/tour_images/migrations", "apps/account/migrations", "apps/location_info/migrations",
                          "apps/review/migrations", "apps/user/migrations",
-                         "apps/favorites/migrations", "apps/business/migrations",]
+                         "apps/favorites/migrations", "apps/business/migrations", "apps/about_us/migrations",]
 
     delete_files(file_names_to_delete, folders_to_search)

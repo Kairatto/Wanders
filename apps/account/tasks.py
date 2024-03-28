@@ -2,9 +2,9 @@ from django.conf import settings
 from config.celery import app
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
 
 User = get_user_model()
 
@@ -42,7 +42,8 @@ def send_change_password_code(email, code):
         )
 
 
-def check_activation():               
-    today = datetime.now(timezone.utc)
-    for user in User.objects.filter(is_active=False) and ((today - user.created_at).seconds/3600) > 24:
-        user.delete()
+@app.task
+def check_activation():
+    threshold = now() - timedelta(hours=24)
+    users_to_delete = User.objects.filter(is_active=False, created_at__lt=threshold)
+    users_to_delete.delete()

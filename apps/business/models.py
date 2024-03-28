@@ -18,8 +18,8 @@ class TourAgent(models.Model):
     image = models.ImageField(upload_to='business_images')
     phone = models.CharField(max_length=13, verbose_name='phone')
     email = models.EmailField(max_length=150, verbose_name='email', blank=True)
-    address = models.CharField(max_length=150, verbose_name='address', blank=True)
-    website = models.CharField(max_length=150, verbose_name='website', blank=True)
+    additional_contacts = models.TextField(max_length=150, blank=True)
+    instagram = models.CharField(max_length=150, verbose_name='instagram', blank=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -33,16 +33,3 @@ class TourAgent(models.Model):
     class Meta:
         verbose_name = 'Тур. агент'
         verbose_name_plural = 'Тур. агенты'
-
-
-class TourAgentImage(models.Model):
-    image = models.ImageField(upload_to='tour_agent_images')
-    business = models.ForeignKey(
-        to=TourAgent,
-        on_delete=models.CASCADE,
-        related_name='tour_agent_images'
-    )
-
-    class Meta:
-        verbose_name = 'Фото тур. агента'
-        verbose_name_plural = 'Фото тур. агента'

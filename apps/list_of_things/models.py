@@ -4,7 +4,7 @@ from apps.tour.models import Tour
 
 
 class ListOfThings(models.Model):
-    title = models.CharField(max_length=3000, verbose_name='Cписок вещей')
+    title = models.CharField(max_length=3000, verbose_name='Cписок вещей', blank=True, null=True)
     tour = models.ForeignKey(
         to=Tour,
         on_delete=models.CASCADE,

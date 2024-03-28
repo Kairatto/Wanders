@@ -14,7 +14,7 @@ class TourFilter(drf_filters.FilterSet):
 
     # min_age = drf_filters.RangeFilter(field_name='min_age')
     amount_of_days = drf_filters.RangeFilter(field_name='amount_of_days')
-    price_KGZ = drf_filters.RangeFilter(field_name='concrete_tour__price_KGZ')
+    price_KGZ = drf_filters.RangeFilter(field_name='concrete_tour_date__price_KGZ')
 
     type_accommodation = CharFilterInFilter(field_name='place__place_residence__type_accommodation', lookup_expr='in')
     tourist_region = CharFilterInFilter(field_name='tourist_region__title', lookup_expr='in')
@@ -40,11 +40,11 @@ class TourFilter(drf_filters.FilterSet):
 class CommonTourListView(generics.ListAPIView):
     serializer_class = TourSerializer
     filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
-    ordering_fields = ['create_date', 'concrete_tour__price_KGZ']
+    ordering_fields = ['create_date', 'concrete_tour_date__price_KGZ']
     filterset_class = TourFilter
 
     def get_base_queryset(self):
-        queryset = Tour.objects.filter(is_active=True)
+        queryset = Tour.objects
         return queryset
 
     def get_queryset(self):

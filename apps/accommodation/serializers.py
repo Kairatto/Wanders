@@ -7,12 +7,6 @@ class PlaceResidenceImagesSerializer(serializers.ModelSerializer):
         model = PlaceResidenceImages
         fields = ('image',)
 
-#
-# class AccommodationImagesSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = AccommodationImages
-#         fields = ('image',)
-
 
 class PlaceResidenceSerializer(serializers.ModelSerializer):
     place_residence_images = PlaceResidenceImagesSerializer(many=True, required=False)
@@ -42,7 +36,7 @@ class PlaceResidenceSerializer(serializers.ModelSerializer):
 
 
 class PlaceSerializer(serializers.ModelSerializer):
-    place_residence = PlaceResidenceSerializer(many=True)
+    place_residence = PlaceResidenceSerializer(many=True, required=False)
 
     class Meta:
         model = Place
@@ -56,21 +50,3 @@ class PlaceSerializer(serializers.ModelSerializer):
             PlaceResidenceImages.objects.create(place=place, **places_residence_data)
 
         return place
-
-#
-# class AccommodationSerializer(serializers.ModelSerializer):
-#
-#     accommodation_images = AccommodationImagesSerializer(many=True)
-#
-#     class Meta:
-#         model = Accommodation
-#         fields = ('description', 'accommodation_images')
-#
-#     def create(self, validated_data):
-#         accommodation_image_data = validated_data.pop('accommodation_images')
-#         accommodations = Accommodation.objects.create(**validated_data)
-#
-#         for accommodation_images_data in accommodation_image_data:
-#             AccommodationImages.objects.create(accommodation=accommodations, **accommodation_images_data)
-#
-#         return accommodations

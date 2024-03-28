@@ -8,9 +8,9 @@ User = get_user_model()
 
 class Profile(models.Model):
     GENDER_CHOICES = (
-        ('f', 'Женский'),
-        ('m', 'Мужской'),
-        ('o', 'Другое')
+        ('female', 'Женский'),
+        ('male', 'Мужской'),
+        ('other', 'Другое')
     )
     user = models.OneToOneField(
         to=User,
@@ -20,24 +20,18 @@ class Profile(models.Model):
     )
 
     first_name = models.CharField(max_length=25)
-    last_name = models.CharField(max_length=25)
-    phone = models.CharField(max_length=13, verbose_name='phone')
-    avatar = models.ImageField(upload_to='user_avatar')
-    birthday = models.DateField(blank=True, null=True)
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=7)
-    country = models.CharField(max_length=30)
-    city = models.CharField(max_length=30)
-
-    bio = models.CharField(max_length=200, verbose_name='bio')
+    last_name = models.CharField(max_length=25, blank=True, null=True)
+    phone = models.CharField(max_length=13, verbose_name='phone', blank=True, null=True)
+    avatar = models.ImageField(upload_to='user_avatar', blank=True, null=True)
+    birthday = models.DateField(null=True, blank=True)
+    gender = models.CharField(choices=GENDER_CHOICES, max_length=7, blank=True, null=True)
+    country = models.CharField(max_length=30, blank=True, null=True)
+    city = models.CharField(max_length=30, blank=True, null=True)
+    bio = models.CharField(max_length=200, verbose_name='bio', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
-    # def save(self, *args, **kwargs):
-    #     if not self.slug:
-    #         self.slug = slugify(self.title)
-    #     return super().save(*args, **kwargs)
-   
     def __str__(self) -> str:
-        return self.first_name + self.last_name
+        return f"{self.first_name} {self.last_name}"
 
     class Meta:
         verbose_name = 'Профиль пользователя'

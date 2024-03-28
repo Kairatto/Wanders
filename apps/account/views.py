@@ -37,11 +37,11 @@ class RegistrationView(APIView):
         
 
 class UserRetrieveView(APIView):
-    def get(self, request: Request, username):
-        user = User.objects.get(username=username)
-        serializer = UserRetrieveSerializer(user).data
+    def get(self, request: Request, email):
         try:
-            return Response(serializer)
+            user = User.objects.get(email=email)
+            serializer = UserRetrieveSerializer(user)
+            return Response(serializer.data)
         except User.DoesNotExist:
             raise Http404
         
@@ -58,7 +58,7 @@ class EmailActivationView(APIView):
         user.activation_code = ''
         user.save()
         return Response(
-            'Account activated. You can login now.',
+            'Ваш аккаунт успешно активирован, можете войти в систему!',
             status=status.HTTP_200_OK
             )
 
@@ -102,22 +102,21 @@ class DeleteAccountView(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request: Request):
-        username = request.user.username
-        User.objects.get(username=username).delete()
-        return Response(
-            'Ваш аккаунт удален.',
-            status=status.HTTP_204_NO_CONTENT
-        )
+        request.user.delete()
+        return Response('Ваш аккаунт удален.', status=status.HTTP_204_NO_CONTENT)
 
 
-class LogoutView(APIView):
-    authentication_classes = (JWTAuthentication,)
+class LogoutAPIView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        try:
-            refresh_token = request.data["refresh"]
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        refresh_token = request.data.get("refresh")
+        if refresh_token:
+            try:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+                logout(request)
+                return Response(status=status.HTTP_205_RESET_CONTENT)
+            except Exception as e:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

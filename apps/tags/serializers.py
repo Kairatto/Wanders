@@ -180,37 +180,3 @@ class TouristRegionBunchSerializer(serializers.ModelSerializer):
     class Meta:
         model = TouristRegion
         fields = ('title', )
-
-
-# class ActivityBunchSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = Activity
-#         fields = ('slug', 'activity',)
-
-
-# class MainLocationBunchSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = MainLocation
-#         fields = ('main_location', )
-
-
-# class ActivitySerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = Activity
-#         fields = ('slug', 'activity',)
-#
-#     def validate_activity(self, value):
-#         return validate_unique(Activity, 'activity', value)
-
-
-# class MainLocationSerializer(serializers.ModelSerializer):
-#
-#     class Meta:
-#         model = MainLocation
-#         fields = ('slug', 'main_location', )
-#
-#     def validate_city(self, value):
-#         return validate_unique(MainLocation, 'main_location', value)

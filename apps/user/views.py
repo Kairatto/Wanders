@@ -1,51 +1,56 @@
-from rest_framework.viewsets import ModelViewSet
+from django.http import Http404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.request import Request
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAdminUser,
-)
-from django.http import Http404
+from apps.user.models import Profile
+from apps.user.serializers import ProfileCreateSerializer, ProfileListSerializer
+from apps.account.permissions import CreateProfile, IsOwner
 
 
-from .permissions import IsOwner
-from .models import Profile
-from .serializers import (
-    ProfileCreateSerializer,
-    ProfileListSerializer,
-    ProfileSerializer
+class ProfileCreateAPIView(APIView):
 
-)
+    permission_classes = [IsAuthenticated, CreateProfile]
+
+    def post(self, request, *args, **kwargs):
+        serializer = ProfileCreateSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProfileViewSet(ModelViewSet):
-    queryset = Profile.objects.all()
-    # serializer_class = ProfileSerializer
+class ProfileListAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        profiles = Profile.objects.all()
+        serializer = ProfileListSerializer(profiles, many=True)
+        return Response(serializer.data)
 
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
 
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return ProfileListSerializer
-        elif self.action == 'create':
-            return ProfileCreateSerializer
-        elif self.action == 'retrieve':
-            return ProfileSerializer
-        elif self.action == 'update' or self.action == 'partial_update':
-            return ProfileSerializer
-        return super().get_serializer_class()
+class ProfileDetailAPIView(APIView):
+    permission_classes = [IsOwner]
 
-    def get_permissions(self):
-        if self.action in ['list', 'retrieve']:
-            self.permission_classes = [AllowAny]
-        if self.action in ['create']:
-            self.permission_classes = [IsAuthenticated]
-        if self.action in ['destroy']:
-            self.permission_classes in [IsOwner,IsAdminUser] # IsOwner, 
-        if self.action in ['update', 'partial_update']:
-            self.permission_classes = [] # IsOwner, 
-        return super().get_permissions()
+    def get_object(self, username):
+        try:
+            return Profile.objects.get(user__username=username)
+        except Profile.DoesNotExist:
+            raise Http404
+
+    def get(self, request, username, *args, **kwargs):
+        profile = self.get_object(username)
+        serializer = ProfileListSerializer(profile)
+        return Response(serializer.data)
+
+    def put(self, request, username, *args, **kwargs):
+        profile = self.get_object(username)
+        serializer = ProfileCreateSerializer(profile, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, username, *args, **kwargs):
+        profile = self.get_object(username)
+        profile.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+

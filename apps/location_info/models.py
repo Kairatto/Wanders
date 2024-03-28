@@ -10,11 +10,9 @@ class LocationInfo(models.Model):
     short_description = models.TextField(max_length=10000, blank=True,  verbose_name='Краткое описнаие локации')
     description = models.TextField(max_length=10000, blank=True,  verbose_name='Описнаие локации')
     how_to_get_there = models.TextField(max_length=10000, blank=True,  verbose_name='Как добраться?')
-    coordinates = models.CharField(max_length=10000, verbose_name='Координаты')
-    coordinates_map = models.CharField(max_length=10000, verbose_name='Координаты на карте')
+    coordinates = models.CharField(max_length=10000, verbose_name='Координаты', blank=True, null=True)
+    coordinates_map = models.CharField(max_length=10000, verbose_name='Координаты на карте', blank=True, null=True)
 
-    # main_location = models.ManyToManyField(to=MainLocation, )
-    # activity = models.ManyToManyField(to=Activity,)
     country = models.ManyToManyField(to=Country, )
     collection = models.ManyToManyField(to=Collection,)
     location = models.ManyToManyField(to=Location, )
