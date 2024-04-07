@@ -31,7 +31,7 @@ class LocationInfo(models.Model):
             base_slug = slugify(f"{self.id}-{self.title}")
             slug = base_slug
             counter = 1
-            while Tour.objects.filter(slug=slug).exists():
+            while LocationInfo.objects.filter(slug=slug).exists():
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug

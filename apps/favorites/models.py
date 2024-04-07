@@ -14,6 +14,3 @@ class FeaturedTours(models.Model):
     class Meta:
         verbose_name = 'Избранный тур'
         verbose_name_plural = 'Избранные туры'
-
-    def __str__(self):
-        return f'{self.author} - {self.favorites}'

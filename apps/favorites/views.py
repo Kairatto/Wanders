@@ -13,11 +13,16 @@ class FeaturedToursCreate(APIView):
     permission_classes = [IsAuthenticated, IsNotBusinessUser, IsOwnerAuthor]
 
     def post(self, request):
-        serializer = FeaturedToursSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = request.data
+        featured_tours = []
+        for item in data:
+            serializer = FeaturedToursSerializer(data=item)
+            if serializer.is_valid():
+                serializer.save(author=request.user)
+                featured_tours.append(serializer.data)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(featured_tours, status=status.HTTP_201_CREATED)
 
 
 class FeaturedToursList(generics.ListAPIView):

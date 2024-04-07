@@ -47,24 +47,9 @@ class Tour(models.Model):
     is_verified = models.BooleanField(default=False, verbose_name='Потверждение администратором')
 
     create_date = models.DateField(auto_now_add=True, verbose_name='Дата создания')
-    slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:
         return self.title if self.title else "Черновик тура"
-
-    def save(self, *args, **kwargs):
-        is_new = self._state.adding
-        super().save(*args, **kwargs)
-
-        if is_new or not self.slug:
-            base_slug = slugify(self.title) if self.title else "Черновик-тура"
-            self.slug = f"{self.id}-{base_slug}"
-            counter = 1
-            original_slug = self.slug
-            while Tour.objects.filter(slug=self.slug).exclude(id=self.id).exists():
-                self.slug = f"{original_slug}-{counter}"
-                counter += 1
-            super(Tour, self).save(update_fields=['slug'])
 
     class Meta:
         verbose_name = 'Тур'

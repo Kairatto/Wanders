@@ -1,4 +1,3 @@
-from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework import generics
@@ -6,9 +5,8 @@ from rest_framework.views import APIView
 
 from apps.tour.filters import CommonTourListView
 from apps.account.permissions import IsBusinessUser, IsOwnerAuthor
-from apps.tour.serializers import TourSerializer, SimilarTourSerializer
+from apps.tour.serializers import TourSerializer, SimilarTourSerializer, TourAuthorSerializer
 from apps.tour.models import Tour
-from apps.tour.utils import BaseCreateAPIView
 
 
 class TourCreate(APIView):
@@ -20,6 +18,15 @@ class TourCreate(APIView):
             serializer.save(author=request.user)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+class TourAuthorList(generics.ListAPIView):
+    serializer_class = TourAuthorSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Tour.objects.filter(author=user)
 
 
 class TourListDev(CommonTourListView):
@@ -42,7 +49,7 @@ class TourListView(CommonTourListView):
         for item in data:
 
             filtered_item = {
-                'slug': item['slug'],
+                'id': item['id'],
                 'title': item['title'],
                 'amount_of_days': item['amount_of_days'],
                 'difficulty_level': item['difficulty_level'],
@@ -54,6 +61,8 @@ class TourListView(CommonTourListView):
                 'location': item['location'],
                 'tourist_region': item['tourist_region'],
                 'concrete_tour_date': item['concrete_tour_date'],
+                'author': item['author'],
+                'author_title': item['author_title'],
             }
 
             filtered_data.append(filtered_item)
@@ -65,7 +74,6 @@ class TourDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerAuthor, IsBusinessUser]
     queryset = Tour.objects.all()
     serializer_class = TourSerializer
-    lookup_field = 'slug'
 
     def get_permissions(self):
         if self.request.method == 'GET':

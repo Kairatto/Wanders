@@ -1,12 +1,14 @@
 from rest_framework import serializers
+from apps.tour.utils import get_author_info
 
-from apps.location_info.models import LocationInfo, LocationInfoImage, GettingThere
-from apps.tags.models import Collection, Country, Location, TouristRegion
 from apps.tour.models import Tour
+from apps.account.serializers import UserSerializer
+from apps.tags.models import Collection, Country, Location, TouristRegion
+from apps.location_info.models import LocationInfo, LocationInfoImage, GettingThere
 
-from apps.concrete_tour.serializers import ConcreteTourDateSerializer
 from apps.tags.serializers import (CollectionBunchSerializer, CountryBunchSerializer, LocationBunchSerializer,
                                    TouristRegionBunchSerializer)
+from apps.concrete_tour.serializers import ConcreteTourDateSerializer
 
 
 class LocationInfoImageSerializer(serializers.ModelSerializer):
@@ -25,11 +27,21 @@ class TourForLocationSerializer(serializers.ModelSerializer):
     country = CountryBunchSerializer(many=True, required=False)
     concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
     location_info = LocationBunchSerializer(many=True, required=False)
+    author = UserSerializer(read_only=True)
+    author_info = serializers.SerializerMethodField()
 
     class Meta:
         model = Tour
-        fields = ['slug', 'location_info', 'main_activity', 'main_location',
-                  'difficulty_level', 'country', 'amount_of_days', 'concrete_tour_date']
+        fields = ['id', 'title', 'amount_of_days', 'location_info', 'main_activity', 'main_location',
+                  'difficulty_level', 'country', 'author', 'amount_of_days', 'author_info', 'concrete_tour_date']
+
+    def get_author_info(self, obj):
+        author = obj.author
+        info = get_author_info(author)
+        if info and 'image_url' in info and info['image_url']:
+            request = self.context.get('request')
+            info['image_url'] = request.build_absolute_uri(info['image_url']) if request else info['image_url']
+        return info
 
 
 class LocationInfoSerializer(serializers.ModelSerializer):
