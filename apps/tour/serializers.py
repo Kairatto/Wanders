@@ -1,12 +1,13 @@
 from rest_framework import serializers
+from django.db.models import Avg
 
 from apps.tour.models import Tour
 from apps.guide.models import Guide
 from apps.question.models import Question
 from apps.days.models import Days, DaysImage
+from apps.tour.utils import get_author_info
 from apps.tour_images.models import TourImages
 from apps.list_of_things.models import ListOfThings
-from apps.account.serializers import UserSerializer
 from apps.includes.models import Included, NotIncluded
 from apps.concrete_tour.models import ConcreteTourDate
 from apps.accommodation.models import (PlaceResidence, PlaceResidenceImages, Place)
@@ -21,17 +22,37 @@ from apps.tour_images.serializers import TourImagesSerializer
 from apps.accommodation.serializers import PlaceSerializer
 from apps.question.serializers import QuestionSerializer
 from apps.guide.serializers import GuideBunchSerializer
+from apps.review.serializers import ReviewSerializer
+from apps.account.serializers import UserSerializer
 from apps.days.serializers import DaysSerializer
+
+
+class TourAuthorSerializer(serializers.ModelSerializer):
+    author = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Tour
+        fields = ('id', 'title', 'author', 'create_date')
 
 
 class SimilarTourSerializer(serializers.ModelSerializer):
     country = CountryBunchSerializer(many=True, required=False)
     concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
+    author = UserSerializer(read_only=True)
+    author_info = serializers.SerializerMethodField()
 
     class Meta:
         model = Tour
-        fields = ['slug', 'title', 'main_activity', 'main_location', 'difficulty_level',
-                  'country', 'amount_of_days', 'concrete_tour_date']
+        fields = ['id', 'title', 'main_activity', 'main_location', 'difficulty_level',
+                  'country', 'amount_of_days', 'author', 'author_info', 'concrete_tour_date']
+
+    def get_author_info(self, obj):
+        author = obj.author
+        info = get_author_info(author)
+        if info and 'image_url' in info and info['image_url']:
+            request = self.context.get('request')
+            info['image_url'] = request.build_absolute_uri(info['image_url']) if request else info['image_url']
+        return info
 
 
 class TourSerializer(serializers.ModelSerializer):
@@ -54,15 +75,55 @@ class TourSerializer(serializers.ModelSerializer):
     language = LanguageBunchSerializer(many=True, required=False)
 
     author = UserSerializer(read_only=True)
+    reviews = serializers.SerializerMethodField(read_only=True)
+    reviews_count = serializers.SerializerMethodField(read_only=True)
+    author_info = serializers.SerializerMethodField(read_only=True)
+    average_rating = serializers.SerializerMethodField(read_only=True)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        request = self.context.get('request')
+        if request and 'people_count' in request.query_params:
+            people_count_param = request.query_params['people_count']
+            if people_count_param.isdigit():
+                people_count = int(people_count_param)
+                filtered_dates = [date for date in representation['concrete_tour_date'] if
+                                  date['total_seats_count'] >= people_count]
+                representation['concrete_tour_date'] = filtered_dates
+            else:
+                pass
+        return representation
 
     class Meta:
         model = Tour
-        fields = ('slug', 'id', 'title', 'description', 'language', 'amount_of_days', 'min_people', 'max_people',
+        fields = ('id', 'title', 'description', 'language', 'amount_of_days', 'min_people', 'max_people',
                   'min_age', 'max_age', 'difficulty_level', 'comfort_level', 'tour_currency', 'type_tour',
                   'insurance_conditions', 'tour_images', 'concrete_tour_date', 'list_of_things', 'included',
-                  'not_included', 'days', 'place', 'guide', 'question', 'country', 'collection',
-                  'main_activity', 'location', 'main_location', 'tourist_region', 'author',
+                  'not_included', 'days', 'place', 'guide', 'question', 'country', 'collection', 'main_activity',
+                  'location', 'main_location', 'tourist_region', 'author', 'author_info',
+                  'average_rating', 'reviews_count', 'reviews',
                   'is_active', 'is_draft', 'is_verified', 'is_archive', 'create_date')
+
+    def get_author_info(self, obj):
+        author = obj.author
+        info = get_author_info(author)
+        if info and 'image_url' in info and info['image_url']:
+            request = self.context.get('request')
+            info['image_url'] = request.build_absolute_uri(info['image_url']) if request else info['image_url']
+        return info
+
+    def get_average_rating(self, obj):
+        average = obj.review_set.aggregate(Avg('rating')).get('rating__avg')
+        if average is not None:
+            return round(average, 1)
+        return 0
+
+    def get_reviews(self, obj):
+        reviews = obj.review_set.all()
+        return ReviewSerializer(reviews, many=True).data
+
+    def get_reviews_count(self, obj):
+        return obj.review_set.count()
 
     def create(self, validated_data):
         concrete_tour_date_data = validated_data.pop('concrete_tour_date', [])

@@ -8,6 +8,6 @@ urlpatterns = [
     path('booking/detail/<int:pk>/', BookingTourDetail.as_view(), name='booking_tour-detail'),
 
     path('concrete_date/create/', ConcreteTourDateCreate.as_view(), name='concrete_tour_date-create'),
-    path('concrete_date/list/', BookingTourList.as_view(), name='booking_tour-list'),
+    path('concrete_date/list/', BookingTourList.as_view(), name='concrete_tour_date-list'),
 
 ]

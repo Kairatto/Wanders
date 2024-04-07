@@ -8,7 +8,7 @@ from rest_framework.exceptions import ValidationError
 from apps.account.permissions import IsStaff
 from apps.tour.utils import BaseCreateAPIView
 
-from apps.concrete_tour.models import BookingTour, ConcreteTourDate
+from apps.concrete_tour.models import BookingTour, ConcreteTourDate, update_total_seats_count
 from apps.concrete_tour.serializers import BookingTourSerializer, ConcreteTourDateCreateSerializer
 
 
@@ -53,32 +53,29 @@ class BookingTourDetail(generics.RetrieveUpdateDestroyAPIView):
                 if instance.seats_count > available_seats:
                     raise ValidationError('Невозможно подтвердить заявку: недостаточно мест.')
 
-        with transaction.atomic():
-            if 'concrete_tour_date' in serializer.validated_data and instance.is_verified:
-                old_concrete_tour_date = instance.concrete_tour_date
-                new_concrete_tour_date = serializer.validated_data['concrete_tour_date']
+        if 'concrete_tour_date' in serializer.validated_data:
+            new_concrete_tour_date = serializer.validated_data['concrete_tour_date']
+            old_concrete_tour_date = instance.concrete_tour_date
 
-                if old_concrete_tour_date.id != new_concrete_tour_date.id:
-                    potential_old_total_seats = BookingTour.objects.filter(
-                        concrete_tour_date=old_concrete_tour_date,
-                        is_verified=True
+            if old_concrete_tour_date.id != new_concrete_tour_date.id and instance.is_verified:
+                potential_new_total_seats = BookingTour.objects.filter(
+                    concrete_tour_date=new_concrete_tour_date, is_verified=True
+                ).aggregate(total_seats=Sum('seats_count'))['total_seats'] or 0
+
+                potential_new_total_seats += instance.seats_count
+
+                if potential_new_total_seats > new_concrete_tour_date.amount_seat:
+                    raise ValidationError("Перевод заявки невозможен: на другой дате недостаточно мест.")
+
+                with transaction.atomic():
+                    old_total_seats = BookingTour.objects.filter(
+                        concrete_tour_date=old_concrete_tour_date, is_verified=True
                     ).exclude(id=instance.id).aggregate(total_seats=Sum('seats_count'))['total_seats'] or 0
-
-                    potential_new_total_seats = BookingTour.objects.filter(
-                        concrete_tour_date=new_concrete_tour_date,
-                        is_verified=True
-                    ).aggregate(total_seats=Sum('seats_count'))['total_seats'] or 0 + instance.seats_count
-
-                    if potential_old_total_seats > old_concrete_tour_date.amount_seat or \
-                            potential_new_total_seats > new_concrete_tour_date.amount_seat:
-                        raise ValidationError("Перевод заявки приведет к недопустимому количеству мест.")
-
-                    old_concrete_tour_date.total_seats_count = old_concrete_tour_date.amount_seat - potential_old_total_seats
+                    old_concrete_tour_date.total_seats_count = old_concrete_tour_date.amount_seat - old_total_seats
                     old_concrete_tour_date.save()
 
                     new_concrete_tour_date.total_seats_count = new_concrete_tour_date.amount_seat - potential_new_total_seats
                     new_concrete_tour_date.save()
 
-            self.perform_update(serializer)
-            return Response(serializer.data)
-
+        self.perform_update(serializer)
+        return Response(serializer.data)

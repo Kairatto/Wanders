@@ -35,14 +35,16 @@ class ConcreteTourDate(models.Model):
 
 class BookingTour(models.Model):
     seats_count = models.PositiveSmallIntegerField(verbose_name='Количество туристов')
-    concrete_tour_date = models.ForeignKey(ConcreteTourDate, on_delete=models.CASCADE, related_name='booking_tour')
-    is_verified = models.BooleanField(default=False)
-    is_seat_deducted = models.BooleanField(default=False) # Возможно не нужна, надо проверить
-    first_name = models.CharField(max_length=25)
-    last_name = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, verbose_name='Имя и Фамилия')
     phone = models.CharField(max_length=13, verbose_name='phone')
     email = models.EmailField(max_length=150, verbose_name='email')
+    description = models.TextField(verbose_name='Комментарий', blank=True)
+    is_verified = models.BooleanField(default=False)
+    concrete_tour_date = models.ForeignKey(ConcreteTourDate, on_delete=models.CASCADE, related_name='booking_tour')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата заявки')
+
+    def __str__(self) -> str:
+        return self.name
 
     class Meta:
         verbose_name = 'Заявка'

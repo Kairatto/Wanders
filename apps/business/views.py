@@ -51,6 +51,11 @@ class TourAgentDetailView(APIView):
         except TourAgent.DoesNotExist:
             raise Http404
 
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsOwner()]
+
     def get(self, request, slug, *args, **kwargs):
         agent = self.get_object(slug)
         serializer = TourAgentSerializer(agent)

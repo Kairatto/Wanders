@@ -4,17 +4,10 @@ from pathlib import Path
 from decouple import config
 from corsheaders.defaults import default_headers
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-dy)hate@daj1v$42^qvx#_fbmqbdclqa@53z%*v1l_@#-bu-5d'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -95,9 +88,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
@@ -116,8 +106,6 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -218,5 +206,4 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 # CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
 
-CELERY_BEAT_SCHEDULER='django_celery_beat.schedulers:DatabaseScheduler'
-
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
