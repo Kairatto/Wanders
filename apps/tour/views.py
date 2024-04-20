@@ -1,12 +1,14 @@
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework import generics
 from rest_framework.views import APIView
+from rest_framework import generics
 
-from apps.tour.filters import CommonTourListView
-from apps.account.permissions import IsBusinessUser, IsOwnerAuthor
-from apps.tour.serializers import TourSerializer, SimilarTourSerializer, TourAuthorSerializer
 from apps.tour.models import Tour
+from apps.tour.filters import CommonTourListView
+from apps.concrete_tour.models import ConcreteTourDate
+from apps.account.permissions import IsBusinessUser, IsOwnerAuthor
+from apps.tour.serializers import (TourSerializer, SimilarTourSerializer, TourAuthorSerializer,
+                                   ConcreteTourDateCRMSerializer)
 
 
 class TourCreate(APIView):
@@ -62,7 +64,7 @@ class TourListView(CommonTourListView):
                 'tourist_region': item['tourist_region'],
                 'concrete_tour_date': item['concrete_tour_date'],
                 'author': item['author'],
-                'author_title': item['author_title'],
+                'author_info': item['author_info'],
             }
 
             filtered_data.append(filtered_item)
@@ -101,4 +103,57 @@ class TourDetail(generics.RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         instance.is_active = False
         instance.save()
-    
+
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+
+from django_filters import rest_framework as filters
+from django.db.models import Q
+
+
+class TourIDFilter(filters.Filter):
+    def filter(self, qs, value):
+        if value in (None, ''):
+            return qs
+        return qs.filter(tour__id=value)
+
+
+class ActiveTourFilter(filters.BooleanFilter):
+    def filter(self, qs, value):
+        if value is None:
+            return qs
+        return qs.filter(tour__is_active=value)
+
+
+class DraftTourFilter(filters.BooleanFilter):
+    def filter(self, qs, value):
+        if value is None:
+            return qs
+        return qs.filter(tour__is_draft=value)
+
+
+class ArchiveTourFilter(filters.BooleanFilter):
+    def filter(self, qs, value):
+        if value is None:
+            return qs
+        return qs.filter(tour__is_archive=value)
+
+
+class ConcreteTourDateCRMFilter(filters.FilterSet):
+    tour_id = TourIDFilter(field_name='tour_id', lookup_expr='exact')
+    is_active = ActiveTourFilter(field_name='is_active', initial=True)
+    is_draft = DraftTourFilter(field_name='is_draft', initial=True)
+    is_archive = ArchiveTourFilter(field_name='is_archive', initial=True)
+
+    class Meta:
+        model = ConcreteTourDate
+        fields = ['tour_id', 'is_active', 'is_archive']
+
+
+class ConcreteTourDateCRMView(generics.ListAPIView):
+    queryset = ConcreteTourDate.objects.all()
+    serializer_class = ConcreteTourDateCRMSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ConcreteTourDateCRMFilter
+    ordering_fields = ['start_date', 'tour__id', 'total_seats_count']
+    ordering = ['start_date']

@@ -39,7 +39,7 @@ class Profile(models.Model):
 
 
 class ProfileImage(models.Model):
-    image = models.ImageField(upload_to='profile_images')
+    image = models.ImageField(upload_to='profile_images', blank=True)
     user = models.ForeignKey(
         to=Profile,
         on_delete=models.CASCADE,

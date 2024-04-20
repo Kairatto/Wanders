@@ -1,15 +1,45 @@
-from django.db import transaction
 from django.db.models import Sum
-from rest_framework import status, generics
-from rest_framework.permissions import AllowAny
+from django.db import transaction
+from rest_framework import generics
 from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from django_filters import DateFromToRangeFilter
+from rest_framework.filters import OrderingFilter
+from django_filters import rest_framework as filters
 from rest_framework.exceptions import ValidationError
+from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.account.permissions import IsStaff
 from apps.tour.utils import BaseCreateAPIView
 
-from apps.concrete_tour.models import BookingTour, ConcreteTourDate, update_total_seats_count
-from apps.concrete_tour.serializers import BookingTourSerializer, ConcreteTourDateCreateSerializer
+from apps.concrete_tour.models import BookingTour, ConcreteTourDate
+from apps.concrete_tour.serializers import (BookingTourSerializer, ConcreteTourDateCreateSerializer,
+                                            BookingTourCRMSerializer)
+
+
+class TourIDFilter(filters.Filter):
+    def filter(self, qs, value):
+        if value in (None, ''):
+            return qs
+        return qs.filter(concrete_tour_date__tour__id=value)
+
+
+class BookingCRMFilter(filters.FilterSet):
+    tour_id = TourIDFilter(field_name='tour_id', )
+    created = DateFromToRangeFilter()
+
+    class Meta:
+        model = BookingTour
+        fields = ['tour_id', 'created']
+
+
+class BookingCRMView(generics.ListAPIView):
+    queryset = BookingTour.objects.all()
+    serializer_class = BookingTourCRMSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = BookingCRMFilter
+    ordering_fields = ['id', 'concrete_tour_date__start_date', 'is_verified']
+    ordering = ['id']
 
 
 class ConcreteTourDateCreate(BaseCreateAPIView):
