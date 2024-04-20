@@ -9,19 +9,19 @@ from apps.tour.utils import get_author_info
 from apps.tour_images.models import TourImages
 from apps.list_of_things.models import ListOfThings
 from apps.includes.models import Included, NotIncluded
-from apps.concrete_tour.models import ConcreteTourDate
+from apps.concrete_tour.models import ConcreteTourDate, BookingTour
 from apps.accommodation.models import (PlaceResidence, PlaceResidenceImages, Place)
 from apps.tags.models import (Collection, Country, Location, TouristRegion, Language, TourCurrency)
 
 from apps.tags.serializers import (CollectionBunchSerializer, CountryBunchSerializer, LocationBunchSerializer,
                                    TouristRegionBunchSerializer, LanguageBunchSerializer, TourCurrencyBunchSerializer)
 from apps.includes.serializers import NotIncludedSerializer, IncludedSerializer
+from apps.guide.serializers import GuideBunchSerializer, GuideCRMSerializer
 from apps.concrete_tour.serializers import ConcreteTourDateSerializer
 from apps.list_of_things.serializers import ListOfThingsSerializer
 from apps.tour_images.serializers import TourImagesSerializer
 from apps.accommodation.serializers import PlaceSerializer
 from apps.question.serializers import QuestionSerializer
-from apps.guide.serializers import GuideBunchSerializer
 from apps.review.serializers import ReviewSerializer
 from apps.account.serializers import UserSerializer
 from apps.days.serializers import DaysSerializer
@@ -29,10 +29,11 @@ from apps.days.serializers import DaysSerializer
 
 class TourAuthorSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
+    concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
 
     class Meta:
         model = Tour
-        fields = ('id', 'title', 'author', 'create_date')
+        fields = ('id', 'title', 'author', 'concrete_tour_date', 'create_date')
 
 
 class SimilarTourSerializer(serializers.ModelSerializer):
@@ -56,8 +57,8 @@ class SimilarTourSerializer(serializers.ModelSerializer):
 
 
 class TourSerializer(serializers.ModelSerializer):
-    list_of_things = ListOfThingsSerializer(many=True, required=False)
     concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
+    list_of_things = ListOfThingsSerializer(many=True, required=False)
     not_included = NotIncludedSerializer(many=True, required=False)
     tour_images = TourImagesSerializer(many=True, required=False)
     included = IncludedSerializer(many=True, required=False)
@@ -76,8 +77,8 @@ class TourSerializer(serializers.ModelSerializer):
 
     author = UserSerializer(read_only=True)
     reviews = serializers.SerializerMethodField(read_only=True)
-    reviews_count = serializers.SerializerMethodField(read_only=True)
     author_info = serializers.SerializerMethodField(read_only=True)
+    reviews_count = serializers.SerializerMethodField(read_only=True)
     average_rating = serializers.SerializerMethodField(read_only=True)
 
     def to_representation(self, instance):
@@ -321,3 +322,26 @@ class TourSerializer(serializers.ModelSerializer):
                 getattr(instance, field).set(objs)
 
         return instance
+
+
+class BookingTourListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BookingTour
+        fields = ('id', 'name', 'phone', 'seats_count')
+
+
+class TourListSerializer(serializers.ModelSerializer):
+    guide = GuideCRMSerializer(many=True)
+
+    class Meta:
+        model = Tour
+        fields = ('id', 'title', 'guide', 'is_active', 'is_draft', 'is_archive',)
+
+
+class ConcreteTourDateCRMSerializer(serializers.ModelSerializer):
+    booking_tour = BookingTourListSerializer(many=True)
+    tour = TourListSerializer()
+
+    class Meta:
+        model = ConcreteTourDate
+        fields = ('id', 'start_date', 'total_seats_count', 'amount_seat', 'booking_tour', 'tour',)

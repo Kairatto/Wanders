@@ -3,6 +3,12 @@ from rest_framework import serializers
 from .models import Guide
 
 
+class GuideCRMSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guide
+        fields = ('first_name', 'photo')
+
+
 class GuideSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guide
