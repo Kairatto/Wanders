@@ -14,7 +14,7 @@ from apps.tour.utils import BaseCreateAPIView
 
 from apps.concrete_tour.models import BookingTour, ConcreteTourDate
 from apps.concrete_tour.serializers import (BookingTourSerializer, ConcreteTourDateCreateSerializer,
-                                            BookingTourCRMSerializer)
+                                            BookingTourCRMSerializer, ConcreteTourDateSerializer)
 
 
 class TourIDFilter(filters.Filter):
@@ -26,11 +26,11 @@ class TourIDFilter(filters.Filter):
 
 class BookingCRMFilter(filters.FilterSet):
     tour_id = TourIDFilter(field_name='tour_id', )
-    created = DateFromToRangeFilter()
+    search_date = DateFromToRangeFilter(field_name='concrete_tour_date__start_date')
 
     class Meta:
         model = BookingTour
-        fields = ['tour_id', 'created']
+        fields = ['tour_id', 'search_date']
 
 
 class BookingCRMView(generics.ListAPIView):
@@ -51,6 +51,11 @@ class ConcreteTourDateList(generics.ListAPIView):
     serializer_class = ConcreteTourDateCreateSerializer
 
 
+class ConcreteTourDateDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ConcreteTourDate.objects.all()
+    serializer_class = ConcreteTourDateSerializer
+
+
 class BookingTourCreate(BaseCreateAPIView):
     serializer_class = BookingTourSerializer
 
@@ -61,7 +66,7 @@ class BookingTourList(generics.ListAPIView):
 
 
 class BookingTourDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsStaff]
+    # permission_classes = [IsStaff]
     queryset = BookingTour.objects.all()
     serializer_class = BookingTourSerializer
 
