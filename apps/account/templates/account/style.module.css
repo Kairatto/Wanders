@@ -1,0 +1,48 @@
+.wrapBox{
+    width: 600px;
+    text-align: center;
+    position: relative;
+}
+.grayBox {
+    width: 520px;
+    border-radius: 30px;
+    background: rgba(236, 236, 236, 1);
+    text-align: center;
+    margin: 15px auto;
+    padding: 20px;
+}
+.star{
+    font-size: 50px;
+    position: absolute;
+    left:60%;
+top:35%;
+}
+
+.grayBox p {
+    font-weight: 700;
+    font-size: 40px;
+}
+
+.grayBox .grayBoxItem {
+    font-size: 30px;
+    margin: 30px auto;
+}
+
+.grayBox .grayBoxDesc {
+
+    font-size: 14px;
+    font-weight: 400;
+}
+.emailButton{
+   padding: 10px 15px;
+   border-radius: 15px;
+   background-color: rgba(40, 40, 40, 1);
+   color: white;
+   font-size: 14px;
+   margin-top: 30px;
+}
+.desc{
+    opacity: 0.8;
+    font-size: 12px;
+
+}

@@ -13,7 +13,7 @@ from apps.location_info.serializers import LocationInfoSerializer, TourForLocati
 
 
 class LocationInfoCreate(BaseCreateAPIView):
-    permission_classes = [IsStaff]
+    permission_classes = [IsStaff, ]
     serializer_class = LocationInfoSerializer
 
 
@@ -50,7 +50,7 @@ class LocationInfoList(generics.ListAPIView):
 
 
 class LocationInfoDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsStaff]
+    permission_classes = [IsStaff, ]
     queryset = LocationInfo.objects.all()
     serializer_class = LocationInfoSerializer
     lookup_field = 'slug'

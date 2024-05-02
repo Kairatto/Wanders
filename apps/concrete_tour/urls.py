@@ -1,7 +1,7 @@
 from django.urls import path
 
 from apps.concrete_tour.views import BookingTourCreate, BookingTourList, BookingTourDetail, ConcreteTourDateCreate, \
-    BookingCRMView, ConcreteTourDateList
+    BookingCRMView, ConcreteTourDateList, ConcreteTourDateDetail
 
 urlpatterns = [
     path('booking/create/', BookingTourCreate.as_view(), name='booking_tour-create'),
@@ -10,6 +10,7 @@ urlpatterns = [
 
     path('concrete_date/create/', ConcreteTourDateCreate.as_view(), name='concrete_tour_date-create'),
     path('concrete_date/list/', ConcreteTourDateList.as_view(), name='concrete_tour_date-list'),
+    path('concrete_date/detail/<int:pk>/', ConcreteTourDateDetail.as_view(), name='concrete_tour_date-detail'),
 
     path('booking/crm/', BookingCRMView.as_view(), name='booking-crm'),
 
