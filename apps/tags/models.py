@@ -168,6 +168,7 @@ class Language(models.Model):
 
 class Collection(models.Model):
     title = models.CharField(max_length=10000)
+    image = models.ImageField(upload_to='collection_images', blank=True, null=True)
     slug = models.SlugField(max_length=10000, unique=True, blank=True)
 
     def __str__(self) -> str:

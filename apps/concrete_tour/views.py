@@ -38,7 +38,7 @@ class BookingCRMView(generics.ListAPIView):
     serializer_class = BookingTourCRMSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = BookingCRMFilter
-    ordering_fields = ['id', 'concrete_tour_date__start_date', 'is_verified']
+    ordering_fields = ['id', 'concrete_tour_date__start_date', 'paid']
     ordering = ['id']
 
 
@@ -82,8 +82,8 @@ class BookingTourDetail(generics.RetrieveUpdateDestroyAPIView):
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
 
-        if 'is_verified' in serializer.validated_data:
-            if serializer.validated_data['is_verified'] and not instance.is_verified:
+        if 'paid' in serializer.validated_data:
+            if serializer.validated_data['paid'] and not instance.paid:
                 available_seats = instance.concrete_tour_date.total_seats_count
                 if instance.seats_count > available_seats:
                     raise ValidationError('Невозможно подтвердить заявку: недостаточно мест.')
@@ -92,9 +92,9 @@ class BookingTourDetail(generics.RetrieveUpdateDestroyAPIView):
             new_concrete_tour_date = serializer.validated_data['concrete_tour_date']
             old_concrete_tour_date = instance.concrete_tour_date
 
-            if old_concrete_tour_date.id != new_concrete_tour_date.id and instance.is_verified:
+            if old_concrete_tour_date.id != new_concrete_tour_date.id and instance.paid:
                 potential_new_total_seats = BookingTour.objects.filter(
-                    concrete_tour_date=new_concrete_tour_date, is_verified=True
+                    concrete_tour_date=new_concrete_tour_date, paid=True
                 ).aggregate(total_seats=Sum('seats_count'))['total_seats'] or 0
 
                 potential_new_total_seats += instance.seats_count
@@ -104,7 +104,7 @@ class BookingTourDetail(generics.RetrieveUpdateDestroyAPIView):
 
                 with transaction.atomic():
                     old_total_seats = BookingTour.objects.filter(
-                        concrete_tour_date=old_concrete_tour_date, is_verified=True
+                        concrete_tour_date=old_concrete_tour_date, paid=True
                     ).exclude(id=instance.id).aggregate(total_seats=Sum('seats_count'))['total_seats'] or 0
                     old_concrete_tour_date.total_seats_count = old_concrete_tour_date.amount_seat - old_total_seats
                     old_concrete_tour_date.save()

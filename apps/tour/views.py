@@ -43,6 +43,9 @@ class TourListDev(CommonTourListView):
 
 
 class TourListView(CommonTourListView):
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.filter(is_active=True)  # is_verified=True
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
@@ -95,7 +98,11 @@ class TourDetail(generics.RetrieveUpdateDestroyAPIView):
         return Response(data)
 
     def get_similar_tours(self, instance):
-        similar_tours_queryset = Tour.objects.filter(main_location=instance.main_location).exclude(id=instance.id)[:4]
+        similar_tours_queryset = Tour.objects.filter(
+            main_location=instance.main_location,
+            is_active=True,
+            # is_verified=True
+        ).exclude(id=instance.id)[:4]
 
         similar_tours_serializer = SimilarTourSerializer(similar_tours_queryset, many=True,
                                                          context={'request': self.request})

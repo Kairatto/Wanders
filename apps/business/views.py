@@ -58,7 +58,7 @@ class TourAgentDetailView(APIView):
 
     def get(self, request, slug, *args, **kwargs):
         agent = self.get_object(slug)
-        serializer = TourAgentSerializer(agent)
+        serializer = TourAgentSerializer(agent, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, slug, *args, **kwargs):

@@ -25,7 +25,7 @@ class BookingTourCRMSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookingTour
-        fields = ('id', 'concrete_tour_date', 'is_verified', 'name', 'email', 'phone', 'seats_count', 'created')
+        fields = ('id', 'concrete_tour_date', 'paid', 'name', 'email', 'phone', 'seats_count', 'created')
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -50,7 +50,7 @@ class BookingTourSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookingTour
         fields = ('id', 'seats_count', 'concrete_tour_date', 'name', 'phone', 'email',
-                  'description', 'is_verified', 'created')
+                  'description', 'paid', 'created')
 
     def validate(self, data):
         concrete_tour_date = data.get('concrete_tour_date')
