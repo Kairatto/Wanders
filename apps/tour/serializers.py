@@ -37,6 +37,7 @@ class TourAuthorSerializer(serializers.ModelSerializer):
 
 
 class SimilarTourSerializer(serializers.ModelSerializer):
+    tour_images = TourImagesSerializer(many=True, required=False)
     country = CountryBunchSerializer(many=True, required=False)
     concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
     author = UserSerializer(read_only=True)
@@ -44,7 +45,7 @@ class SimilarTourSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ['id', 'title', 'main_activity', 'main_location', 'difficulty_level',
+        fields = ['id', 'title', 'tour_images', 'main_activity', 'main_location', 'difficulty_level',
                   'country', 'amount_of_days', 'author', 'author_info', 'concrete_tour_date']
 
     def get_author_info(self, obj):
@@ -84,15 +85,38 @@ class TourSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         request = self.context.get('request')
+
         if request and 'people_count' in request.query_params:
             people_count_param = request.query_params['people_count']
             if people_count_param.isdigit():
                 people_count = int(people_count_param)
-                filtered_dates = [date for date in representation['concrete_tour_date'] if
-                                  date['total_seats_count'] >= people_count]
-                representation['concrete_tour_date'] = filtered_dates
-            else:
+                representation['concrete_tour_date'] = [
+                    date for date in representation['concrete_tour_date']
+                    if date['total_seats_count'] >= people_count
+                ]
+
+        if request:
+            price_kgz_min = request.query_params.get('price_KGZ_min', None)
+            price_kgz_max = request.query_params.get('price_KGZ_max', None)
+
+            filtered_dates = representation['concrete_tour_date']
+
+            try:
+                if price_kgz_min is not None:
+                    price_kgz_min = int(price_kgz_min)
+                    filtered_dates = [date for date in filtered_dates if date['price_KGZ'] >= price_kgz_min]
+            except ValueError:
                 pass
+
+            try:
+                if price_kgz_max is not None and price_kgz_max.isdigit():
+                    price_kgz_max = int(price_kgz_max)
+                    filtered_dates = [date for date in filtered_dates if date['price_KGZ'] <= price_kgz_max]
+            except ValueError:
+                pass
+
+            representation['concrete_tour_date'] = filtered_dates
+
         return representation
 
     class Meta:
@@ -327,7 +351,7 @@ class TourSerializer(serializers.ModelSerializer):
 class BookingTourListSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookingTour
-        fields = ('id', 'name', 'phone', 'seats_count')
+        fields = ('id', 'name', 'phone', 'seats_count', 'is_verified')
 
 
 class TourListSerializer(serializers.ModelSerializer):

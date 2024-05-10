@@ -33,11 +33,17 @@ class TourAgentCreateSerializer(serializers.ModelSerializer):
 class TourAgentSerializer(serializers.ModelSerializer):
     average_rating = serializers.SerializerMethodField()
     organizer_tours = serializers.SerializerMethodField()
+    total_reviews_count = serializers.SerializerMethodField()
 
     class Meta:
         model = TourAgent
-        fields = ['slug', 'title', 'desc', 'image', 'additional_contacts', 'phone', 'email', 'instagram',
-                  'average_rating', 'organizer_tours']
+        fields = ['slug', 'title', 'desc', 'image', 'additional_contacts', 'phone', 'email', 'instagram', 'is_verified',
+                  'average_rating', 'total_reviews_count', 'organizer_tours']
+
+    def get_total_reviews_count(self, obj):
+        user = obj.user
+        total_reviews = Review.objects.filter(tour__author=user).count()
+        return total_reviews
 
     def get_average_rating(self, obj):
         # Получаем пользователя, связанного с TourAgent
@@ -56,7 +62,7 @@ class TourAgentListSerializer(serializers.ModelSerializer):
 
      class Meta:
         model = TourAgent
-        fields = ['slug', 'title', 'phone', 'email', 'instagram']
+        fields = ['slug', 'title', 'phone', 'email', 'instagram', 'is_verified']
 
 
 class TourAgentUpdateSerializer(serializers.ModelSerializer):

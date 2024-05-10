@@ -86,7 +86,7 @@ class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Collection
-        fields = ('slug', 'id', 'title', )
+        fields = ('slug', 'id', 'title', 'image')
 
     def validate_collection(self, value):
         return validate_unique(Collection, 'title', value)

@@ -11,7 +11,7 @@ from apps.account.views import (
     SetRestoredPasswordView,
     RestorePasswordView,
     DeleteAccountView,
-    UserRetrieveView, LogoutAPIView,
+    UserRetrieveView, LogoutAPIView, UserInfoView,
 )
 
 urlpatterns = [
@@ -27,5 +27,7 @@ urlpatterns = [
     path('set-restored-password/', SetRestoredPasswordView.as_view(), name='set_restored_password'),
     path('delete-account/', DeleteAccountView.as_view(), name='delete account'),
 
-    path('user-retrieve/<int:id>/', UserRetrieveView.as_view(), name='get-user')
+    path('user-retrieve/<int:id>/', UserRetrieveView.as_view(), name='get-user'),
+    path('user-info/', UserInfoView.as_view(), name='user-info'),
+
 ]

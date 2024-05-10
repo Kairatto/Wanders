@@ -9,6 +9,7 @@ from apps.location_info.models import LocationInfo, LocationInfoImage, GettingTh
 from apps.tags.serializers import (CollectionBunchSerializer, CountryBunchSerializer, LocationBunchSerializer,
                                    TouristRegionBunchSerializer)
 from apps.concrete_tour.serializers import ConcreteTourDateSerializer
+from apps.tour_images.serializers import TourImagesSerializer
 
 
 class LocationInfoImageSerializer(serializers.ModelSerializer):
@@ -24,6 +25,7 @@ class GettingThereSerializer(serializers.ModelSerializer):
 
 
 class TourForLocationSerializer(serializers.ModelSerializer):
+    tour_images = TourImagesSerializer(many=True, required=False)
     country = CountryBunchSerializer(many=True, required=False)
     concrete_tour_date = ConcreteTourDateSerializer(many=True, required=False)
     location_info = LocationBunchSerializer(many=True, required=False)
@@ -32,7 +34,7 @@ class TourForLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tour
-        fields = ['id', 'title', 'amount_of_days', 'location_info', 'main_activity', 'main_location',
+        fields = ['id', 'title', 'tour_images', 'amount_of_days', 'location_info', 'main_activity', 'main_location',
                   'difficulty_level', 'country', 'author', 'amount_of_days', 'author_info', 'concrete_tour_date']
 
     def get_author_info(self, obj):

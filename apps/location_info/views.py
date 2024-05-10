@@ -64,7 +64,7 @@ class LocationInfoDetail(generics.RetrieveUpdateDestroyAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         location_titles = instance.location.all().values_list('title', flat=True)
-        tours_to_location = Tour.objects.filter(location__title__in=location_titles).distinct()[:3]
+        tours_to_location = Tour.objects.filter(location__title__in=location_titles, is_active=True).distinct()[:3]
 
         tours_to_location_serializer = TourForLocationSerializer(tours_to_location, many=True, context={'request': request})
         response_data = serializer.data

@@ -39,7 +39,7 @@ class BookingTour(models.Model):
     phone = models.CharField(max_length=13, verbose_name='phone')
     email = models.EmailField(max_length=150, verbose_name='email')
     description = models.TextField(verbose_name='Комментарий', blank=True)
-    is_verified = models.BooleanField(default=False)
+    paid = models.BooleanField(default=False)
     concrete_tour_date = models.ForeignKey(ConcreteTourDate, on_delete=models.CASCADE, related_name='booking_tour')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Дата заявки')
 
@@ -57,7 +57,7 @@ def update_total_seats_count(sender, instance, **kwargs):
     concrete_tour_date = instance.concrete_tour_date
     if concrete_tour_date:
         total_seats_count = \
-        BookingTour.objects.filter(concrete_tour_date=concrete_tour_date, is_verified=True).aggregate(
+        BookingTour.objects.filter(concrete_tour_date=concrete_tour_date, paid=True).aggregate(
             total_seats=Sum('seats_count'))['total_seats'] or 0
         concrete_tour_date.total_seats_count = concrete_tour_date.amount_seat - total_seats_count
         concrete_tour_date.save()
