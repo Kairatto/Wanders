@@ -33,6 +33,15 @@ class TourAuthorList(generics.ListAPIView):
         return Tour.objects.filter(author=user)
 
 
+class TourDraftList(generics.ListAPIView):
+    serializer_class = TourSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Tour.objects.filter(author=user, is_draft=True)
+
+
 class TourListDev(CommonTourListView):
 
     def list(self, request, *args, **kwargs):

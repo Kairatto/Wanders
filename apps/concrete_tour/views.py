@@ -10,6 +10,7 @@ from rest_framework.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.account.permissions import IsStaff
+from apps.tour.models import Tour
 from apps.tour.utils import BaseCreateAPIView
 
 from apps.concrete_tour.models import BookingTour, ConcreteTourDate

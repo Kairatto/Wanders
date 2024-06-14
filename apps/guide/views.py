@@ -19,4 +19,3 @@ class GuideDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Guide.objects.all()
     serializer_class = GuideBunchSerializer
     lookup_field = 'slug'
-

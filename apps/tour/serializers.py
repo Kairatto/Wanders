@@ -114,9 +114,7 @@ class TourSerializer(serializers.ModelSerializer):
                     filtered_dates = [date for date in filtered_dates if date['price_KGZ'] <= price_kgz_max]
             except ValueError:
                 pass
-
             representation['concrete_tour_date'] = filtered_dates
-
         return representation
 
     class Meta:
@@ -351,7 +349,7 @@ class TourSerializer(serializers.ModelSerializer):
 class BookingTourListSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookingTour
-        fields = ('id', 'name', 'phone', 'seats_count', 'is_verified')
+        fields = ('id', 'name', 'phone', 'seats_count', 'paid')
 
 
 class TourListSerializer(serializers.ModelSerializer):

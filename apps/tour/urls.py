@@ -1,6 +1,7 @@
 from django.urls import path
 
-from apps.tour.views import TourCreate, TourListDev, TourListView, TourDetail, TourAuthorList, ConcreteTourDateCRMView
+from apps.tour.views import (TourCreate, TourListDev, TourListView, TourDetail, TourAuthorList, ConcreteTourDateCRMView,
+                             TourDraftList)
 
 urlpatterns = [
     path('create/', TourCreate.as_view(), name='tour-create'),
@@ -10,5 +11,6 @@ urlpatterns = [
     path('detail/<int:pk>/', TourDetail.as_view(), name='tour-detail'),
 
     path('crm/', ConcreteTourDateCRMView.as_view(), name='tour-crm'),
+    path('draft/', TourDraftList.as_view(), name='tour-draft'),
 
 ]

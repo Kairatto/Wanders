@@ -187,9 +187,6 @@ class TouristRegionDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
 
 
-# language, insurance_conditions, difficulty_level, comfort_level, type_tour, tour_currency
-
-
 class AllTagsView(APIView):
     def get(self, request, format=None):
         collections = Collection.objects.all()
@@ -215,6 +212,9 @@ class AllTagsView(APIView):
         comfort_level_serializer = ComfortLevelSerializer(comfort_level, many=True)
         type_tour_serializer = TypeTourSerializer(type_tour, many=True)
         tour_currency_serializer = TourCurrencySerializer(tour_currency, many=True)
+
+# language, insurance_conditions, difficulty_level, comfort_level, type_tour
+        # , tour_currency, collection, country, tourist_region, location, language
 
         all_tags_data = {
             'collection': collection_serializer.data,

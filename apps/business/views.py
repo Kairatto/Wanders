@@ -45,9 +45,9 @@ class TourAgentCreateView(APIView):
 class TourAgentDetailView(APIView):
     permission_classes = [IsOwner]
 
-    def get_object(self, slug):
+    def get_object(self, email):
         try:
-            return TourAgent.objects.get(slug=slug)
+            return TourAgent.objects.get(user__email=email)
         except TourAgent.DoesNotExist:
             raise Http404
 
@@ -56,20 +56,20 @@ class TourAgentDetailView(APIView):
             return [AllowAny()]
         return [IsOwner()]
 
-    def get(self, request, slug, *args, **kwargs):
-        agent = self.get_object(slug)
+    def get(self, request, email, *args, **kwargs):
+        agent = self.get_object(email)
         serializer = TourAgentSerializer(agent, context={'request': request})
         return Response(serializer.data)
 
-    def put(self, request, slug, *args, **kwargs):
-        agent = self.get_object(slug)
+    def put(self, request, email, *args, **kwargs):
+        agent = self.get_object(email)
         serializer = TourAgentUpdateSerializer(agent, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, slug, *args, **kwargs):
-        agent = self.get_object(slug)
+    def delete(self, request, email, *args, **kwargs):
+        agent = self.get_object(email)
         agent.delete()
         return Response('Бизнес аккаунт успешно удален', status=status.HTTP_204_NO_CONTENT)

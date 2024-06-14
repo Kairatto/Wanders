@@ -6,7 +6,7 @@ from corsheaders.defaults import default_headers
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-dy)hate@daj1v$42^qvx#_fbmqbdclqa@53z%*v1l_@#-bu-5d'
+SECRET_KEY = 'DJANGO_SECRET_KEY'
 
 DEBUG = True
 
